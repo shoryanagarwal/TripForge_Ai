@@ -38,4 +38,14 @@ router.get('/airplanes/:id',authenticatorUser,airplaneController.getAirplaneById
 
 
 
+// Flight routes
+
+const FlightController=require('../../controller/flightControlletr.js')
+const flightController=new FlightController();
+
+router.post('/flights',authenticatorUser,flightController.create);
+router.get('/flights/:id',authenticatorUser,flightController.get);
+router.get('/flights',authenticatorUser,flightController.getAll);
+
+
 module.exports=router;
