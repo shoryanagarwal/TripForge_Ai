@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');  
 const cors = require('cors');
 
-
+const ApiRoutes= require('./routes/index.js');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(helmet());
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(cors());
-
+app.use('/api',ApiRoutes);
 
 
 app.get("/",(req,res)=>{
