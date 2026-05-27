@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:'airplaneId',
         as:'airplane'
       })
+
+      Flight.hasMany(models.Flight_Booking,{
+        foreignKey:'flightId',
+        as:'bookings'
+      })
+
       // define association here --- IGNORE ---
     }
   }
@@ -61,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     status: {
-      type: DataTypes.ENUM('scheduled', 'delayed', 'cancelled', 'departed', 'arrived'),
+      type: DataTypes.ENUM('scheduled', 'delayed', 'cancelled', 'departed', 'arrived','full'),
       
     },
     airplaneId: {

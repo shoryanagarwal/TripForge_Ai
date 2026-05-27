@@ -43,7 +43,7 @@ module.exports = {
         allowNull: false
       },
       status: {
-        type: Sequelize.ENUM('scheduled', 'delayed', 'cancelled', 'departed', 'arrived'),
+        type: Sequelize.ENUM('scheduled', 'delayed', 'cancelled', 'departed', 'arrived','full'),
         defaultValue: 'scheduled',
         allowNull: false
       },

@@ -48,4 +48,15 @@ router.get('/flights/:id',authenticatorUser,flightController.get);
 router.get('/flights',authenticatorUser,flightController.getAll);
 
 
+
+
+// Booking routes
+const BookingController=require('../../controller/bookingController.js')
+const bookingController=new BookingController();
+
+router.post('/bookings',authenticatorUser,bookingController.create);
+router.get('/bookings/:id',authenticatorUser,bookingController.getBookingById);
+router.get('/mybookings',authenticatorUser,bookingController.getBookingsByUserId);
+router.post('/bookings/:id/cancel',authenticatorUser,bookingController.cancel);
+
 module.exports=router;
