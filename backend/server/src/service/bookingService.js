@@ -1,7 +1,7 @@
-const {sequelize,Flight,Flight_Booking}= require('../models')
+const {sequelize,Flight,Flight_Booking,User}= require('../models')
 
 const BookingRepository = require('../repository/bookingRepository.js')
-
+const sendEmail = require('../utils/emailService.js');
 
 const bookingRepository = new BookingRepository()
 
@@ -24,7 +24,7 @@ class BookingService{
             });
 
             const expireAt=new Date(
-                Date.now() + 1*60*1000 // 5 minutes
+                Date.now() + 5*60*1000 // 5 minutes
             )
 
             if(!flight){
@@ -180,6 +180,42 @@ class BookingService{
 
             await flight.save({transaction});
             await booking.save({transaction});
+
+
+            const fullBooking= await Flight_Booking.findByPk(bookingId,{
+                include:[
+                    {
+                        model:User,
+                        as:'user',
+                        attributes:['id','name','email']
+                    },
+                    {
+                        model:Flight,
+                        as:'flight'
+                    }
+
+                ],
+                transaction
+            })
+
+            await sendEmail({
+                to:fullBooking.user.email,
+                 subject: "TripForge AI - Booking Cancelled",
+                    html: `
+                        <h2>Booking Cancelled</h2>
+                        <p>Hi ${fullBooking.user.name},</p>
+                        <p>Your booking has been cancelled successfully.</p>
+                        <p><b>Booking ID:</b> ${fullBooking.id}</p>
+                        <p><b>Flight:</b> ${fullBooking.flight.flightNumber}</p>
+                        <p><b>Route:</b> ${fullBooking.flight.source} → ${fullBooking.flight.destination}</p>
+                        <p><b>Seats Cancelled:</b> ${fullBooking.seats}</p>
+                        <p><b>Refund Amount:</b> ₹${fullBooking.totalAmount}</p>
+                        <p>Your refund will be processed soon.</p>
+                    `,
+
+            })
+
+
             await transaction.commit();
 
             return booking;

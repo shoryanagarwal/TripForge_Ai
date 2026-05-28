@@ -20,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         as:'bookings'
       })
 
+      
+
       // define association here --- IGNORE ---
     }
   }

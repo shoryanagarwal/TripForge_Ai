@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         as:'flight'
       })
 
+      Flight_Booking.hasOne(models.Payment,{
+        foreignKey:'bookingId',
+        as:'payment'
+      })
+      
 
 
     }
@@ -71,6 +76,15 @@ module.exports = (sequelize, DataTypes) => {
     expiresAt: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    remainderAt:{
+      type:DataTypes.DATE,
+      allowNull:true
+    },
+    reminderSent:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false,
+        allowNull:false
     }
   }, {
     sequelize,
