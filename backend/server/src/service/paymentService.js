@@ -4,6 +4,9 @@ const {sequelize,Flight_Booking,User,Flight} = require('../models');
 const crypto = require('crypto');
 const paymentRepository = new PaymentRepository();
 const sendEmail = require('../utils/emailService.js');
+const generateTicket=require('../utils/pdfGenerate.js')
+ const fs = require("fs");
+
 class PaymentService{
 
     async createPayment(data){
@@ -63,6 +66,9 @@ class PaymentService{
             booking.remainderAt = remainderTime;
             await booking.save({transaction});
 
+            const pdfPath = await generateTicket(fullBooking,payment);
+
+
             await sendEmail({
                 to:fullBooking.user.email,
                subject: "TripForge AI - Booking Confirmed",
@@ -78,7 +84,17 @@ class PaymentService{
                     <p><b>Amount Paid:</b> ₹${fullBooking.totalAmount}</p>
                     <p><b>Transaction ID:</b> ${transactionId}</p>
                 `,
+                attachments:[
+                    {
+                        filename:`Ticket_${bookingId}.pdf`,
+                        path:pdfPath
+                    }
+                ]
             })
+
+           
+
+            fs.unlinkSync(pdfPath);
 
 
             await transaction.commit();
@@ -94,6 +110,8 @@ class PaymentService{
 
         }
     }
+
+
 
 
 
