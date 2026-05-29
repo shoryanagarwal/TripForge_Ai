@@ -6,8 +6,9 @@ dotenv.config();
 
 const app = require("./app");
 
-require('./jobs/expireBooking.js')
-require('./jobs/reminderBooking.js')
+require('./jobs/flightexpireBooking.js')
+require('./jobs/flightreminderBooking.js')
+require('./jobs/busexpireBooking.js')
 const PORT = process.env.PORT || 3000;
 
 const startServer= async()=>{

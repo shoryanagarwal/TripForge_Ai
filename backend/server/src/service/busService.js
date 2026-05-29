@@ -1,38 +1,35 @@
-const FlightRepository = require('../repository/flightRepository.js')
+const BusRepository = require('../repository/busRepository.js')
 
-const AirplaneRepository = require('../repository/airplaneRepository.js')
-
-const airplaneRepository = new AirplaneRepository()
 const {Op}=require('sequelize')
+const busRepository = new BusRepository()
 
-const flightRepository = new FlightRepository()
 
 
-class FlightService{
+class BusService{
 
-    async createFlight(data){
+    async createBus(data){
 
         try{
 
-            const airplane= await airplaneRepository.getAirplaneById(data.airplaneId)
+          
 
-            if(!airplane){
-                throw new Error("Airplane not found")
-            }
+            
 
             //check the timee
 
             if(new Date(data.departureTime) >= new Date(data.arrivalTime)){
                 throw new Error("Departure time should be less than arrival time")
+
+            const expireAt=new Date(
+                Date.now() + 5*60*1000 // 5 minutes
+            )
             }
 
-            data.availableSeats=airplane.totalSeats
 
-            const flight=await flightRepository.createFlight(data);
+            const bus=await busRepository.createBus(data);
 
 
-            return flight;
-           
+            return bus;           
 
 
         }
@@ -48,12 +45,12 @@ class FlightService{
 
 
 
-    async getFlight(flightId){
+    async getBusById(busId){
     
         
         try{
-            const flight = await flightRepository.getFlight(flightId)
-            return flight;
+            const bus = await busRepository.getBusById(busId)
+            return bus;
 
         }
         catch(error){
@@ -64,7 +61,7 @@ class FlightService{
     }
 
 
-    async getAllFlights(query){
+    async getAllBus(query){
         try{
 
             let filter={};
@@ -88,7 +85,7 @@ class FlightService{
             }
 
 
-            return await flightRepository.getAllFlights(filter)
+            return await busRepository.getAllBus(filter)
             
 
 
@@ -106,4 +103,4 @@ class FlightService{
 
 
 
-module.exports = FlightService
+module.exports = BusService

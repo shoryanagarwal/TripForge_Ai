@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 
-const {Flight_Booking,Flight}= require('../models');
+const {Flight_Booking,Flight,Bus_Booking,Bus}= require('../models');
 
 
 const {Op} = require('sequelize');
@@ -71,5 +71,13 @@ cron.schedule('* * * * *',async()=>{
 
 
 })
+
+
+
+
+
+
+
+
 
 

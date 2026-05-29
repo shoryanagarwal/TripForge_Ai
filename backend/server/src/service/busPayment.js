@@ -1,22 +1,20 @@
-const PaymentRepository = require('../repository/paymentRepository.js');
-
-const {sequelize,Flight_Booking,User,Flight} = require('../models');
+const BusPaymentRepository = require('../repository/busPaymentRepository');
+const {sequelize,Bus_Booking,User,Bus} = require('../models');
 const crypto = require('crypto');
-const paymentRepository = new PaymentRepository();
+const busPaymentRepository = new BusPaymentRepository();
 const sendEmail = require('../utils/emailService.js');
-const generateTicket=require('../utils/flightpdfGenerate.js')
+const BusgenerateTicket=require('../utils/buspdfgnerator.js')
  const fs = require("fs");
-
-class PaymentService{
+class BusPaymentService{
 
     async createPayment(data){
             const transaction= await sequelize.transaction();
 
 
         try{
-            const {bookingId,paymentMode}=data;
+            const { busBookingId,paymentMode}=data;
 
-            const booking= await Flight_Booking.findByPk(bookingId,{
+            const booking= await Bus_Booking.findByPk(busBookingId,{
                 transaction,
                 lock:transaction.LOCK.UPDATE
             })
@@ -32,8 +30,8 @@ class PaymentService{
             const transactionId=crypto.randomUUID();
 
 
-            const payment=await paymentRepository.createPayment({
-                bookingId,
+            const payment=await busPaymentRepository.createPayment({
+                 busBookingId,
                 amount:booking.totalAmount,
                 paymentMode,
                 transactionId,
@@ -45,7 +43,7 @@ class PaymentService{
 
 
 
-            const fullBooking = await Flight_Booking.findByPk(bookingId,{
+            const fullBooking = await Bus_Booking.findByPk(busBookingId,{
                 include:[
                     {
                         model:User,
@@ -53,48 +51,49 @@ class PaymentService{
                         attributes:['id','name','email']
                     },
                     {
-                        model:Flight,
-                        as:'flight'
-                    },
+                        model:Bus,
+                        as:'bus'
+                    }
 
                 ],
                 transaction
             })
 
 
-            const remainderTime = new Date(fullBooking.flight.departureTime.getTime()-12 * 60 * 60 * 1000);
+            const remainderTime = new Date(fullBooking.bus.departureTime.getTime()-12 * 60 * 60 * 1000);
             booking.remainderAt = remainderTime;
             await booking.save({transaction});
 
-            const pdfPath = await generateTicket(fullBooking,payment);
-
+             const pdfPath = await generateTicket(fullBooking,payment);
 
             await sendEmail({
                 to:fullBooking.user.email,
                subject: "TripForge AI - Booking Confirmed",
-                text: `Your payment for booking ${bookingId} has been confirmed. Transaction ID: ${transactionId}`,
+                text: `Your payment for booking ${busBookingId} has been confirmed. Transaction ID: ${transactionId}`,
                 html: `
                     <h2>Booking Confirmed ✅</h2>
                     <p>Hi ${fullBooking.user.name},</p>
                     <p>Your payment has been confirmed.</p>
-                    <p><b>Booking ID:</b> ${bookingId}</p>
-                    <p><b>Flight:</b> ${fullBooking.flight.flightNumber}</p>
-                    <p><b>Route:</b> ${fullBooking.flight.source} → ${fullBooking.flight.destination}</p>
+                    <p><b>Booking ID:</b> ${busBookingId}</p>
+                    <p><b>Bus:</b> ${fullBooking.bus.busNumber}</p>
+                    <p><b>Route:</b> ${fullBooking.bus.source} → ${fullBooking.bus.destination}</p>
                     <p><b>Seats:</b> ${fullBooking.seats}</p>
                     <p><b>Amount Paid:</b> ₹${fullBooking.totalAmount}</p>
                     <p><b>Transaction ID:</b> ${transactionId}</p>
                 `,
+
                 attachments:[
                     {
-                        filename:`Ticket_${bookingId}.pdf`,
+                        filename:`Ticket_${busBookingId}.pdf`,
                         path:pdfPath
                     }
                 ]
+
+                
             })
 
-           
+             fs.unlinkSync(pdfPath);
 
-            fs.unlinkSync(pdfPath);
 
 
             await transaction.commit();
@@ -119,7 +118,7 @@ class PaymentService{
 
 
         try{
-            const payment= await paymentRepository.getPaymentById(paymentId);
+            const payment= await busPaymentRepository.getPaymentById(paymentId);
             return payment;
         }
         catch(error){
@@ -140,4 +139,4 @@ class PaymentService{
 
 
 
-module.exports=PaymentService;
+module.exports=BusPaymentService;

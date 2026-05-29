@@ -99,4 +99,29 @@ router.get('/test-email',async(req,res)=>{
 
 })
 
+
+// Bus routes
+const BusController=require('../../controller/busController.js')
+const busController=new BusController();
+
+router.post('/buses',authenticatorUser,busController.create);
+router.get('/buses/:id',authenticatorUser,busController.get);
+router.get('/buses',authenticatorUser,busController.getAll);
+
+// Bus Booking routes
+const BusBookingController=require('../../controller/busBookingController.js')
+const busBookingController=new BusBookingController();
+
+router.post('/busbookings',authenticatorUser,busBookingController.create);
+router.get('/busbookings/:id',authenticatorUser,busBookingController.getBookingById);
+router.get('/mybusbookings',authenticatorUser,busBookingController.getBookingsByUserId);
+router.patch('/busbookings/:id/cancel',authenticatorUser,busBookingController.cancel);
+
+
+// Bus Payment routes
+const BusPaymentController=require('../../controller/busPaymentController.js')
+const busPaymentController=new BusPaymentController();
+router.post('/buspayments',authenticatorUser,busPaymentController.create);
+router.get('/buspayments/:id',authenticatorUser,busPaymentController.getPaymentById);
+
 module.exports=router;

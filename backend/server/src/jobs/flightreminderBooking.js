@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const {Flight_Booking,Flight,User,Sequelize} = require('../models');
+const {Flight_Booking,Flight,User,Sequelize} = require('../models/index.js');
 const sendEmail = require('../utils/emailService.js');
 const {Op} = Sequelize;
 

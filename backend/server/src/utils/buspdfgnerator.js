@@ -30,7 +30,7 @@ const generateTicket=async(booking,payment)=>{
     doc.moveDown();
 
     doc.fontSize(18).text(
-        "Flight Ticket Confirmation"
+        "Bus Ticket Confirmation"
     );
 
     doc.moveDown();
@@ -50,19 +50,19 @@ const generateTicket=async(booking,payment)=>{
     doc.moveDown();
 
     doc.text(
-        `Flight Number: ${booking.flight.flightNumber}`
+        `Flight Number: ${booking.bus.busNumber}`
     );
 
     doc.text(
-        `Route: ${booking.flight.source} → ${booking.flight.destination}`
+        `Route: ${booking.bus.source} → ${booking.bus.destination}`
     );
 
     doc.text(
-        `Departure: ${booking.flight.departureTime}`
+        `Departure: ${booking.bus.departureTime}`
     );
 
     doc.text(
-        `Arrival: ${booking.flight.arrivalTime}`
+        `Arrival: ${booking.bus.arrivalTime}`
     );
 
     doc.text(
