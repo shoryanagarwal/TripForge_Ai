@@ -45,6 +45,9 @@ cron.schedule('* * * * *',async()=>{
 
 
             booking.status='cancelled';
+            booking.cancelledBy="system";
+            booking.cancellationReason="Booking expired due to non-payment";
+            booking.cancelledAt=new Date();
 
             await booking.save({transaction});
             await flight.save({transaction});

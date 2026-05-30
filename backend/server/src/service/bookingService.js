@@ -136,7 +136,7 @@ class BookingService{
 
 
 
-    async cancelBooking(bookingId,userId){
+    async cancelBooking(bookingId,userId,role){
     
         const transaction = await sequelize.transaction();
 
@@ -177,6 +177,17 @@ class BookingService{
             }
 
             booking.status='cancelled';
+          if(role === 'admin'){
+                booking.cancelledBy="admin"
+                booking.cancellationReason="Cancelled by admin"
+
+            }
+            else{
+                booking.cancelledBy="user"
+                booking.cancellationReason="Cancelled by user"
+            }
+            booking.cancelledAt=new Date();
+
 
             await flight.save({transaction});
             await booking.save({transaction});

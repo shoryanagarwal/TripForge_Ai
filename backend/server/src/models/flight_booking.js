@@ -85,6 +85,22 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.BOOLEAN,
       defaultValue:false,
         allowNull:false
+    },
+
+    cancelledBy:{
+      type:DataTypes.ENUM("user","admin","system"),
+      allowNull:true
+
+    },
+
+    cancellationReason:{
+      type:DataTypes.STRING,
+      allowNull:true
+    },
+
+    cancelledAt:{
+      type:DataTypes.DATE,
+      allowNull:true
     }
   }, {
     sequelize,

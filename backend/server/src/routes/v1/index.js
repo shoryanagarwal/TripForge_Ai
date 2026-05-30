@@ -6,7 +6,7 @@ const AuthController=require('../../controller/authController.js')
 const authenticatorUser=require('../../middleware/auth_middleware.js')
 const authcontroller=new AuthController();
 
-
+const {isadmin} =require('../../middleware/authorisation_middleware.js')
 router.post('/signup',authcontroller.signup);
 router.post('/login',authcontroller.login);
 
@@ -31,7 +31,7 @@ const AirplaneController=require('../../controller/airplaneController.js')
 const airplaneController=new AirplaneController();
 
 
-router.post('/airplanes',authenticatorUser,airplaneController.createAirplane);
+router.post('/airplanes',authenticatorUser,isadmin,airplaneController.createAirplane);
 router.get('/airplanes',authenticatorUser,airplaneController.getAllAirplanes);
 router.get('/airplanes/:id',authenticatorUser,airplaneController.getAirplaneById);
 
@@ -43,7 +43,7 @@ router.get('/airplanes/:id',authenticatorUser,airplaneController.getAirplaneById
 const FlightController=require('../../controller/flightControlletr.js')
 const flightController=new FlightController();
 
-router.post('/flights',authenticatorUser,flightController.create);
+router.post('/flights',authenticatorUser,isadmin,flightController.create);
 router.get('/flights/:id',authenticatorUser,flightController.get);
 router.get('/flights',authenticatorUser,flightController.getAll);
 
@@ -104,7 +104,7 @@ router.get('/test-email',async(req,res)=>{
 const BusController=require('../../controller/busController.js')
 const busController=new BusController();
 
-router.post('/buses',authenticatorUser,busController.create);
+router.post('/buses',authenticatorUser,isadmin,busController.create);
 router.get('/buses/:id',authenticatorUser,busController.get);
 router.get('/buses',authenticatorUser,busController.getAll);
 

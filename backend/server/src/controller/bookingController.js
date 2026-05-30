@@ -99,7 +99,7 @@ class BookingController{
 
         async cancel(req,res){
             try{
-                const booking = await bookingService.cancelBooking(req.params.id,req.user.id)
+                const booking = await bookingService.cancelBooking(req.params.id,req.user.id,req.user.role)
 
                 return res.status(200).json({
                     success:true,

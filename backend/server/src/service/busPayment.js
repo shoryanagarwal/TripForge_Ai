@@ -64,7 +64,7 @@ class BusPaymentService{
             booking.remainderAt = remainderTime;
             await booking.save({transaction});
 
-             const pdfPath = await generateTicket(fullBooking,payment);
+             const pdfPath = await BusgenerateTicket(fullBooking,payment);
 
             await sendEmail({
                 to:fullBooking.user.email,

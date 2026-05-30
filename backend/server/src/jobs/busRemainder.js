@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const {Flight_Booking,Flight,User,sequelize} = require('../models/index.js');
+const {Bus_Booking,Bus,User,Sequelize, sequelize} = require('../models/index.js');
 const sendEmail = require('../utils/emailService.js');
 const {Op} = sequelize;
 
@@ -11,10 +11,10 @@ cron.schedule('0 * * * *',async()=>{
     const transaction = await sequelize.transaction();
 
     try{
-        const bookings= await Flight_Booking.findAll({
+        const bookings= await Bus_Booking.findAll({
             where:{
                 status:'confirmed',
-                 reminderSent:false,
+                reminderSent:false,
                 reminderAt:{
                     [Op.lte]:new Date()
                 }
@@ -29,8 +29,8 @@ cron.schedule('0 * * * *',async()=>{
                     attributes:['id','name','email']
                 },
                 {
-                    model:Flight,
-                    as:'flight'
+                    model:Bus,
+                    as:'bus'
                 }
 
 
@@ -47,15 +47,17 @@ cron.schedule('0 * * * *',async()=>{
                 await sendEmail({
 
                     to:booking.user.email,
+                    subject: "TripForge AI - Bus Journey Reminder",
                      html: `
                     <h2>Journey Reminder ✈️</h2>
+                    
                     <p>Hi ${booking.user.name},</p>
                     <p>This is a reminder for your upcoming journey.</p>
-                    <p><b>Flight:</b> ${booking.flight.flightNumber}</p>
-                    <p><b>Route:</b> ${booking.flight.source} → ${booking.flight.destination}</p>
-                    <p><b>Departure:</b> ${booking.flight.departureTime}</p>
+                    <p><b>Bus:</b> ${booking.bus.busNumber}</p>
+                    <p><b>Route:</b> ${booking.bus.source} → ${booking.bus.destination}</p>
+                    <p><b>Departure:</b> ${booking.bus.departureTime}</p>
                     <p><b>Seats:</b> ${booking.seats}</p>
-                    <p>Please reach the airport on time.</p>
+                    <p>Please reach the Bus Stand on time.</p>
                     `,
 
                 })
