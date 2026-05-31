@@ -39,6 +39,9 @@ class BookingService{
             if(flight.status !== 'scheduled'){  
                 throw new Error("Flight is not scheduled")
             }
+            if (!seats || seats <= 0) {
+                throw new Error("Seats must be greater than 0");
+            }
 
             const totalAmount = flight.price * seats;
             flight.availableSeats=flight.availableSeats - seats;

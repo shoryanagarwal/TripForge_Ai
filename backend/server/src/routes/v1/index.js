@@ -57,7 +57,7 @@ const bookingController=new BookingController();
 router.post('/bookings',authenticatorUser,bookingController.create);
 router.get('/bookings/:id',authenticatorUser,bookingController.getBookingById);
 router.get('/mybookings',authenticatorUser,bookingController.getBookingsByUserId);
-router.post('/bookings/:id/cancel',authenticatorUser,bookingController.cancel);
+router.patch('/bookings/:id/cancel',authenticatorUser,bookingController.cancel);
 
 
 
@@ -70,34 +70,7 @@ router.get('/payments/:id',authenticatorUser,paymentController.getPaymentById);
 
 
 // Email routes
-const sendEmail=require('../../utils/emailService.js')
-router.get('/test-email',async(req,res)=>{
 
-        try{
-                await sendEmail({
-                        to:'shoryanagarwal154@gmail.com',
-                        subject:'Test Email from TripForge AI',
-                        text:'This is a test email sent from the TripForge AI application.',
-                        html:'<p>This is a test email sent from the <strong>TripForge AI</strong> application.</p>'
-                })
-
-                res.status(200).json({
-                        message:"Test email sent successfully",
-                        success:true,
-                        data:{},
-                        err:{}
-                })
-        }
-        catch(error){
-                res.status(500).json({
-                        message:"Error sending email",
-                        success:false,
-                        data:{},
-                        err:error.message
-                })
-        }
-
-})
 
 
 // Bus routes

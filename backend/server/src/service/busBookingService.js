@@ -47,6 +47,9 @@ class BusBookingService{
             if(bus.availableSeats === 0){
                 bus.status='full'
             }
+            if (!seats || seats <= 0) {
+                throw new Error("Seats must be greater than 0");
+            }
 
             await bus.save({transaction});
             const booking = await busbookingRepository.createBooking({

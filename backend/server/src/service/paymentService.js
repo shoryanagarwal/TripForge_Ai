@@ -28,6 +28,13 @@ class PaymentService{
             if(booking.status!=='pending'){
                 throw new Error("Payment can only be made for pending bookings")
             }
+            if (booking.status === "cancelled") {
+                throw new Error("Cannot make payment for cancelled booking");
+            }
+
+            if (booking.status === "confirmed") {
+            throw new Error("Payment already completed for this booking");
+            }
 
             const transactionId=crypto.randomUUID();
 
