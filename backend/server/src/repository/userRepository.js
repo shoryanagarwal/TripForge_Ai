@@ -20,12 +20,15 @@ class UserRepository{
 
 
     async findByEmail(email){
-
+        console.log("Finding user by email in repository",email);
         try{
 
 
-            const user=await User.findOne({where:{email:email}});
-
+            const user =await User.findOne({
+                where:{
+                    email:email
+                }
+            })
 
             return user;
         }

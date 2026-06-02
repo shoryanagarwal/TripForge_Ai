@@ -1,6 +1,6 @@
-const PaymentRepository = require('../repository/paymentRepository.js');
+const PaymentRepository = require('../repository/filghtPaymentRepository.js');
 
-const {sequelize,Flight_Booking,User,Flight} = require('../models');
+const {sequelize,Flight_Booking,User,Flight} = require('../models/index.js');
 const crypto = require('crypto');
 const paymentRepository = new PaymentRepository();
 const sendEmail = require('../utils/emailService.js');

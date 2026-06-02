@@ -59,6 +59,22 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue:"USER"
 
 
+    },
+
+    isVerified:{
+        type: DataTypes.BOOLEAN,
+        defaultValue:false,
+        allowNull:false
+    },
+
+    otp:{
+        type: DataTypes.STRING,
+        allowNull:true
+    },
+
+    otp_expiry:{
+        type: DataTypes.DATE,
+        allowNull:true
     }
   }, {
     sequelize,

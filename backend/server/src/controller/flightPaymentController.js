@@ -1,4 +1,4 @@
-const PaymentService = require('../service/paymentService.js');
+const PaymentService = require('../service/flightPaymentService.js');
 
 const paymentService = new PaymentService();
 

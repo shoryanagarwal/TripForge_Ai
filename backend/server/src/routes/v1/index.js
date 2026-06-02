@@ -62,7 +62,7 @@ router.patch('/bookings/:id/cancel',authenticatorUser,bookingController.cancel);
 
 
 // Payment routes
-const PaymentController=require('../../controller/paymentController.js')
+const PaymentController=require('../../controller/flightPaymentController.js')
 const paymentController=new PaymentController();
 
 router.post('/payments',authenticatorUser,paymentController.create);
@@ -96,5 +96,20 @@ const BusPaymentController=require('../../controller/busPaymentController.js')
 const busPaymentController=new BusPaymentController();
 router.post('/buspayments',authenticatorUser,busPaymentController.create);
 router.get('/buspayments/:id',authenticatorUser,busPaymentController.getPaymentById);
+
+
+//otp verification route
+router.post('/verify-email',authcontroller.verifyEmail);
+
+//resend otp
+
+router.post('/resend-otp',authcontroller.resendOtp);
+
+
+// Ai routes
+const AiController=require('../../controller/AiController.js')
+const aiController=new AiController();
+
+router.post('/ai/recommend',authenticatorUser,aiController.recommendTrips);
 
 module.exports=router;

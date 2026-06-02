@@ -1,3 +1,4 @@
+const { json } = require("sequelize");
 const Authenticate = require("../service/authService.js");
 
 
@@ -62,6 +63,75 @@ class AuthController{
             console.log("Error in login in controller",error);
             res.status(500).json({
                 message:"Internal server error",
+                success:false,
+                data:{},
+                err:error
+            })
+
+        }
+
+
+
+    }
+
+
+    async verifyEmail(req,res){
+
+            try{
+
+                const user= await authenticate.verifyEmail(req.body);
+
+                res.status(200).json({
+                    message:"Email verified successfully",
+                    success:true,
+                    data:user,
+                    err:{}
+                })
+            
+            }
+            catch(error){
+
+                console.log("Error in email verification in controller",error);
+                res.status(500).json({
+                    message:"Internal server error",
+                    success:false,
+                    data:{},
+                    err:error
+                })
+
+            }
+
+
+
+
+
+
+    }
+
+
+
+    async resendOtp(req,res){
+
+        try {
+            
+            const otp=await authenticate.resendOtp(req.body);
+
+
+            res.status(200).json({
+                     message:"otp send successfully",
+                    success:true,
+                    data:otp,
+                    err:{}
+            })
+
+
+
+        } 
+        
+        catch (error) {
+            console.log("Error in resending otp in controller",error);
+            res.status(500).json({
+                message:"error while sending otp",
                 success:false,
                 data:{},
                 err:error
