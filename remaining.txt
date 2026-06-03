@@ -1,0 +1,9 @@
+TripForge Remaining Tasks
+
+[ ] Frontend Auth
+[ ] Flight Search UI
+[ ] Bus Search UI
+[ ] Booking Flow
+[ ] Payment UI
+[ ] AI Recommendation Page
+[ ] Deployment
