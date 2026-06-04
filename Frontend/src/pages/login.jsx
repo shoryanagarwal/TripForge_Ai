@@ -10,8 +10,12 @@ function Login(){
 
                     <div className="flex justify-center mb-6">
                         <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center">
-                            <Plane size={28} />
+                            <Plane size={28} />  
+                           
                         </div>
+                        <div className="flex items-center">
+                         <h1 className="text-2xl font-bold ml-2 text-cyan-300">TripForge AI</h1>
+                         </div>
 
                     </div>
 
