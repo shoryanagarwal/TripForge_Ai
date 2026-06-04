@@ -1,7 +1,38 @@
+import {useState} from 'react'
+import api from '../api/axios.js'
+import {useNavigate} from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 import { Plane, Mail, Lock } from "lucide-react";
 import {Link} from 'react-router-dom'
 
 function Login(){
+
+            const navigate=useNavigate();
+            const [formData,setFormData]=useState({
+                email:'',
+                password:''
+             })
+
+
+             const handleSubmit=async(e)=>{
+                e.preventDefault();
+
+                try{
+                  const response= await api.post('/login',formData);
+
+                  localStorage.setItem('token',response.data.token)
+                  localStorage.setItem('user',JSON.stringify(response.data.user))
+
+                  toast.success(response.data.message);
+                  navigate('/home');
+
+                }
+                catch(error){
+                    toast.error(error.response.data.message || 'Something went wrong')
+                }
+
+
+             }
 
         return (
 
@@ -25,13 +56,18 @@ function Login(){
                     <p className="text-slate-400 text-center mt-2 mb-2">Login to continue your journey with TripForge AI</p>
 
                     <div className="mt-8">
-                    <form classNamemt="8 space-y-5 ">
+                    <form className="8 space-y-5 " onSubmit={handleSubmit}>
                         <div>
                             <label className="text-sm text-slate-300 ">Email</label>
                          <div className="mt-2 flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3">
               <Mail size={18} className="text-slate-500" />
               <input
                 type="email"
+                value={formData.email}
+                onChange={(e)=>setFormData({
+                    ...formData,
+                    email:e.target.value
+                })}
                 placeholder="Enter your email"
                 className="bg-transparent outline-none w-full text-sm text-white placeholder:text-slate-600"
               />
@@ -44,6 +80,11 @@ function Login(){
               <Lock size={18} className="text-slate-500" />
               <input
                 type="password"
+                value={formData.password}
+                onChange={(e)=>setFormData({
+                    ...formData,
+                    password:e.target.value
+                })}
                 placeholder="Enter your password"
                 className="bg-transparent outline-none w-full text-sm text-white placeholder:text-slate-600"
               />
