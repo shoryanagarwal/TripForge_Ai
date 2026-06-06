@@ -101,6 +101,11 @@ module.exports = (sequelize, DataTypes) => {
     cancelledAt:{
       type:DataTypes.DATE,
       allowNull:true
+    },
+
+    passengerDetails:{
+      type:DataTypes.JSONB,// Storing passenger details as JSON ->JSONB allows us to store complex data structures, such as an array of passenger objects, directly in the database. Each passenger object can contain fields like name, age, gender, and passport number
+      allowNull:true
     }
   }, {
     sequelize,

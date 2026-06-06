@@ -14,7 +14,8 @@ class BookingService{
 
         try{
 
-            const {flightId,userId,seats}=data;
+            const {flightId,userId,seats,passengerDetails}=data;
+
 
 
             const flight= await Flight.findByPk(flightId,{
@@ -43,6 +44,10 @@ class BookingService{
                 throw new Error("Seats must be greater than 0");
             }
 
+            if (!passengerDetails || passengerDetails.length !== seats) {
+               throw new Error("Passenger count must match selected seats");
+            }
+
             const totalAmount = flight.price * seats;
             flight.availableSeats=flight.availableSeats - seats;
 
@@ -58,7 +63,8 @@ class BookingService{
                 seats,
                 totalAmount,
                 status:'pending',
-                expiresAt:expireAt
+                expiresAt:expireAt,
+                passengerDetails
 
             },transaction);
 
@@ -154,6 +160,9 @@ class BookingService{
                 }
 
             )
+            console.log("Booking to be cancelled",booking)
+            console.log("User id from request",userId)
+            console.log("User role from request",role)
 
 
             if(!booking){
@@ -180,13 +189,13 @@ class BookingService{
             }
 
             booking.status='cancelled';
-          if(role === 'admin'){
-                booking.cancelledBy="admin"
+          if(role === 'ADMIN'){
+                booking.cancelledBy="ADMIN"
                 booking.cancellationReason="Cancelled by admin"
 
             }
             else{
-                booking.cancelledBy="user"
+                booking.cancelledBy="USER"
                 booking.cancellationReason="Cancelled by user"
             }
             booking.cancelledAt=new Date();
@@ -212,6 +221,13 @@ class BookingService{
                 transaction
             })
 
+            
+
+
+            await transaction.commit();
+
+
+            
             await sendEmail({
                 to:fullBooking.user.email,
                  subject: "TripForge AI - Booking Cancelled",
@@ -230,9 +246,9 @@ class BookingService{
             })
 
 
-            await transaction.commit();
+            return fullBooking;
 
-            return booking;
+           
             
 
         }
@@ -241,6 +257,8 @@ class BookingService{
             await transaction.rollback();
             throw error
         }
+
+         
     
     
     }

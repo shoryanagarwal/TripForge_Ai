@@ -1,5 +1,5 @@
  import {useState} from 'react'
- import api from '../api/axios.js'
+ import api from '../../api/axios.js'
  import {useNavigate, useLocation} from 'react-router-dom'
  import { toast } from 'react-hot-toast'
  import { Link } from "react-router-dom";

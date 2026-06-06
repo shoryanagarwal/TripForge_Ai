@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       defaultValue: false
+    },
+    passengerDetails: {
+      type: DataTypes.JSONB,
+      allowNull: true
     }
   }, {
     sequelize,

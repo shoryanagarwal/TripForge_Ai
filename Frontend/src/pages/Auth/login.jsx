@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import api from '../api/axios.js'
+import api from '../../api/axios.js'
 import {useNavigate} from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { Plane, Mail, Lock } from "lucide-react";
@@ -19,10 +19,13 @@ function Login(){
 
                 try{
                   const response= await api.post('/login',formData);
+                  const {token,user}=response.data.data;
+                  console.log(response.data.data);
 
-                  localStorage.setItem('token',response.data.token)
-                  localStorage.setItem('user',JSON.stringify(response.data.user))
-
+                  localStorage.setItem('token',token);
+                  localStorage.setItem('user',JSON.stringify(user));
+                  console.log(token);
+                  
                   toast.success(response.data.message);
                   navigate('/home');
 

@@ -1,6 +1,6 @@
  import { Plane, Mail, Lock,User  } from "lucide-react";
 import {Link} from 'react-router-dom'
-import api from '../api/axios.js'
+import api from '../../api/axios.js'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";

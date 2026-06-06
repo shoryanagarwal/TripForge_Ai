@@ -14,7 +14,7 @@ class BusBookingService{
 
         try{
 
-            const {busId,userId,seats}=data;
+            const {busId,userId,seats,passengerDetails}=data;
 
 
             const bus= await Bus.findByPk(busId,{
@@ -39,6 +39,7 @@ class BusBookingService{
             if(bus.status !== 'scheduled'){  
                 throw new Error("Bus is not scheduled")
             }
+            
 
             const totalAmount = bus.price * seats;
             bus.availableSeats=bus.availableSeats - seats;
@@ -50,6 +51,9 @@ class BusBookingService{
             if (!seats || seats <= 0) {
                 throw new Error("Seats must be greater than 0");
             }
+            if (!passengerDetails || passengerDetails.length !== seats) {
+                throw new Error("Passenger count must match selected seats");
+            }
 
             await bus.save({transaction});
             const booking = await busbookingRepository.createBooking({
@@ -58,7 +62,8 @@ class BusBookingService{
                 seats,
                 totalAmount,
                 status:'pending',
-                expiresAt:expireAt
+                expiresAt:expireAt,
+                passengerDetails
 
             },transaction);
 

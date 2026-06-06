@@ -100,10 +100,8 @@ class FlightService{
     }
 
 
-
-
+    
 }
-
 
 
 module.exports = FlightService

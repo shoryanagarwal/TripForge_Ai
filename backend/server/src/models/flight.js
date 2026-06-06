@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         as:'bookings'
       })
 
+      Flight.hasMany(models.FarePackage,{
+        foreignKey:'flightId',
+        as:'farePackages'
+      })
+
       
 
       // define association here --- IGNORE ---

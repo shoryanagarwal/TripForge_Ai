@@ -112,4 +112,11 @@ const aiController=new AiController();
 
 router.post('/ai/recommend',authenticatorUser,aiController.recommendTrips);
 
+
+//Fare package routes
+const FarePackageController=require('../../controller/FarePackageController.js')
+const farePackageController=new FarePackageController();
+router.post('/fare-packages',authenticatorUser,isadmin,farePackageController.createFarePackage);
+router.get('/flights/:flightId/fare-packages',authenticatorUser,farePackageController.getFarePackagesByFlight);
+
 module.exports=router;
