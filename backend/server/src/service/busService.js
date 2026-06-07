@@ -83,6 +83,7 @@ class BusService{
                     [Op.lt]:endDate
                 }
             }
+            
 
 
             return await busRepository.getAllBus(filter)

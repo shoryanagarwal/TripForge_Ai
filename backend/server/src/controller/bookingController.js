@@ -15,7 +15,8 @@ class BookingController{
                 userId:req.user.id,
                 flightId:req.body.flightId,
                 seats:req.body.seats,
-                passengerDetails:req.body.passengerDetails
+                passengerDetails:req.body.passengerDetails,
+                totalAmount:req.body.totalAmount
             })
 
 

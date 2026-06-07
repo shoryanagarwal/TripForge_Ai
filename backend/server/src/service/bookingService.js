@@ -14,7 +14,7 @@ class BookingService{
 
         try{
 
-            const {flightId,userId,seats,passengerDetails}=data;
+            const {flightId,userId,seats,passengerDetails,totalAmount}=data;
 
 
 
@@ -48,13 +48,21 @@ class BookingService{
                throw new Error("Passenger count must match selected seats");
             }
 
-            const totalAmount = flight.price * seats;
-            flight.availableSeats=flight.availableSeats - seats;
+           
 
 
             if(flight.availableSeats === 0){
                 flight.status='full'
             }
+
+
+
+            const todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0)
+            if (flight.departureTime < todayDate) {
+                throw new Error("Cannot book a flight that has already departed");
+            }
+
 
             await flight.save({transaction});
             const booking = await bookingRepository.createBooking({
@@ -174,6 +182,12 @@ class BookingService{
             }
             if(booking.status === 'cancelled'){
                 throw new Error("Booking is already cancelled")
+            }
+
+            const now= new Date();
+            const departureTime= booking.flight.departureTime;
+            if(now >= departureTime){
+                throw new Error("Cannot cancel booking for flight that has already departed")
             }
 
             const flight= await Flight.findByPk(booking.flightId,{

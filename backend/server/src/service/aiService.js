@@ -1,6 +1,6 @@
-const ai=require('../config/gemini_config.js');
 const {Flight,Bus}=require('../models');
-
+const {Op}=require('sequelize');
+const groqClient=require('../config/groq_config.js');
 class AiService{
 
     async recommendTrips(data){
@@ -13,7 +13,8 @@ class AiService{
             const filter={
                 source:source,
                 destination:destination,
-                status:'scheduled'
+                status:'scheduled',
+
             }
 
 
@@ -24,10 +25,10 @@ class AiService{
                 endDate.setDate(endDate.getDate()+1);
 
 
-                filter.departureTime={ // applying filter for both flights and buses as they both have departureTime field between startDate and endDate
-                    $gte:startDate,
-                    $lt:endDate
-                }
+               filter.departureTime = {
+                [Op.gte]: startDate,
+                [Op.lt]: endDate,
+            };
 
             
             }
@@ -67,15 +68,30 @@ class AiService{
                 Important:
                 Only use the provided flight and bus data.
                 Do not invent unavailable options.
-                If no options are available, say no travel options found.`
+                If no options are available, say no travel options found.
+                Before giving recommendation, carefully calculate cheapest and fastest options from the provided data. Do not make mathematical mistakes.
+               
+                Do not infer airline names, bus operators, or any other information from the flight or bus numbers.
+                Only use the exact fields provided in the data.
+                If a field is missing, simply omit it.
+                Never make assumptions.
+
+                calculate the cheapest and fastest options yourself based on the provided data. Do not rely on any "cheapest" or "fastest" labels in the data, as they may not be accurate.
+                `
 
 
-                const response= await ai.models.generateContent({
-                    model:"gemini-2.0-flash",
-                    contents:prompt
-                })
+                const response = await groqClient.post("/chat/completions", {
+                    model: "llama-3.1-8b-instant",
+                    messages: [
+                        {
+                        role: "user",
+                        content: prompt,
+                        },
+                    ],
+                    temperature: 0.4,
+                });
 
-                return response.text;
+                return response.data.choices[0].message.content;
         }
 
 

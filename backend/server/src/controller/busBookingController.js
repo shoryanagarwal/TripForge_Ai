@@ -15,6 +15,8 @@ class BusBookingController{
                 userId:req.user.id,
                 busId:req.body.busId,
                 seats:req.body.seats,
+                passengerDetails:req.body.passengerDetails,
+                totalAmount:req.body.totalAmount
             })
 
 

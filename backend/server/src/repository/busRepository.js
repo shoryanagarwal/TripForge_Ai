@@ -58,6 +58,8 @@ class BusRepository{
                 where:filter,
                 
             });
+
+            console.log("Buses in repository",bus);
             return bus;
         }
         catch(error){

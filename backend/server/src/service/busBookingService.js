@@ -14,7 +14,7 @@ class BusBookingService{
 
         try{
 
-            const {busId,userId,seats,passengerDetails}=data;
+            const {busId,userId,seats,passengerDetails,totalAmount}=data;
 
 
             const bus= await Bus.findByPk(busId,{
@@ -41,8 +41,7 @@ class BusBookingService{
             }
             
 
-            const totalAmount = bus.price * seats;
-            bus.availableSeats=bus.availableSeats - seats;
+            
 
 
             if(bus.availableSeats === 0){
@@ -53,6 +52,13 @@ class BusBookingService{
             }
             if (!passengerDetails || passengerDetails.length !== seats) {
                 throw new Error("Passenger count must match selected seats");
+            }
+
+
+             const todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0)
+            if (bus.departureTime < todayDate) {
+                throw new Error("Cannot book a bus that has already departed");
             }
 
             await bus.save({transaction});
@@ -170,6 +176,12 @@ class BusBookingService{
             }
             if(booking.status === 'cancelled'){
                 throw new Error("Booking is already cancelled")
+            }
+
+            const now= new Date();
+            const departureTime= booking.bus.departureTime;
+            if(now >= departureTime){
+                throw new Error("Cannot cancel booking for bus that has already departed")
             }
 
             const bus= await Bus.findByPk(booking.busId,{

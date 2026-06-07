@@ -61,6 +61,8 @@ class BusController{
             const filter = req.query
             const bus=await busService.getAllBus(filter);
 
+            console.log(bus);
+
             return res.status(200).json({
                 success:true,
                 message:"bus fetched successfully",
