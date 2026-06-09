@@ -168,10 +168,18 @@ class BookingService{
                 }
 
             )
+
+            const flightId= booking.flightId
+            const flight= await Flight.findByPk(flightId,{
+                transaction,
+                lock:transaction.LOCK.UPDATE
+
+            })
             console.log("Booking to be cancelled",booking)
             console.log("User id from request",userId)
             console.log("User role from request",role)
 
+            console.log("Booking user id",flight)
 
             if(!booking){
                 throw new Error("Booking not found")
@@ -185,16 +193,12 @@ class BookingService{
             }
 
             const now= new Date();
-            const departureTime= booking.flight.departureTime;
+            const departureTime= f.dataValues.departureTime
             if(now >= departureTime){
                 throw new Error("Cannot cancel booking for flight that has already departed")
             }
 
-            const flight= await Flight.findByPk(booking.flightId,{
-                transaction,
-                lock:transaction.LOCK.UPDATE
-
-            })
+            
 
             flight.availableSeats=flight.availableSeats + booking.seats;
 

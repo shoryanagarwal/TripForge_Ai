@@ -40,26 +40,26 @@ import { toast } from "react-hot-toast";
          return (
 
             <div className="min-h-screen bg-[#020617] text-white flex items-center justify-center px-4 ">
-                <div className="w-full max-w-md bg-[#0f172a] border border-slate-800 rounded-2xl p-8 shadow-2xl mb-10 ">
+                <div className="w-full max-w-sm bg-[#0B132B] border border-slate-800 rounded-2xl p-5 shadow-2xl  ">
 
-                    <div className="flex justify-center mb-3">
-                        <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center">
-                            <Plane size={24} />
+                    <div className="flex justify-center mb-3 gap-3">
+                        <div className="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center">
+                            <Plane size={18} />
                         </div>
                         <div className="flex items-center">
-                         <h1 className="text-2xl font-bold ml-2 text-cyan-300">TripForge AI</h1>
+                         <h1 className="text-xl font-bold ml-2 text-blue-200">TripForge AI</h1>
                          </div>
 
                     </div>
 
-                    <h1 className="text-3xl font-bold text-center">Create Account</h1>
+                    <h1 className="text-xl font-bold text-center">Start Your Journey </h1>
 
 
-                    <p className="text-slate-400 text-center mt-1.5 mb-1.5">Sign Up to start your journey with TripForge AI</p>
+                    <p className="text-slate-400 text-center mt-1.5  text-sm">Sign Up to start your journey with TripForge AI</p>
 
-                    <div className="mt-6">
-                    <form className="mt-2 space-y-5 " onSubmit={handleSubmit}>
-                        <div className="mb-3.5">
+                    <div className="mt-5">
+                    <form className="mt-2 space-y-2 " onSubmit={handleSubmit}>
+                        <div >
                             <label className="text-sm text-slate-300 ">Name</label>
                             <div className="mt-2 flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3">
                             <User size={18} className="text-slate-500" />
@@ -75,10 +75,11 @@ import { toast } from "react-hot-toast";
                             />
                             </div>
                         </div>
-
                         
-                            <label className="text-sm text-slate-300 ">Email</label>
-                         <div className="mt-2 flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3">
+
+                        <div className="mt-2">
+                        <label className="text-sm text-slate-300 ">Email</label>
+                <div className="mt-2 flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3">
               <Mail size={18} className="text-slate-500" />
               <input
                 type="text"
@@ -91,8 +92,10 @@ import { toast } from "react-hot-toast";
                 className="bg-transparent outline-none w-full text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-0 focus:border-none"
               />
             </div>
+            </div>
 
-          <div className="mt-4">
+
+          <div >
             <label className="text-sm text-slate-300">Password</label>
             <div className="mt-2 flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3">
               <Lock size={18} className="text-slate-500" />
@@ -111,7 +114,7 @@ import { toast } from "react-hot-toast";
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold mt-3"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold "
           >
             Create Account
           </button>
@@ -119,7 +122,7 @@ import { toast } from "react-hot-toast";
 
         </div>
 
-        <p className="text-center text-slate-400 text-sm mt-6">
+        <p className="text-center text-slate-400 text-sm mt-2">
           Already Have An Account?{" "}
           <Link to="/" className="text-blue-500 hover:text-blue-400 font-medium">
             Login

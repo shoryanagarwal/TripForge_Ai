@@ -40,25 +40,25 @@ function Login(){
         return (
 
             <div className="min-h-screen bg-[#020617] text-white flex items-center justify-center px-4">
-                <div className="w-full max-w-md bg-[#0f172a] border border-slate-800 rounded-2xl p-8 shadow-2xl">
+                <div className="w-full max-w-sm bg-[#0B132B] border border-slate-800 rounded-2xl p-5 shadow-2xl">
 
-                    <div className="flex justify-center mb-6">
-                        <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center">
-                            <Plane size={28} />  
+                    <div className="flex justify-center mb-4 gap-3">
+                        <div className="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center">
+                            <Plane size={18} />  
                            
                         </div>
                         <div className="flex items-center">
-                         <h1 className="text-2xl font-bold ml-2 text-cyan-300">TripForge AI</h1>
+                         <h1 className="text-xl font-bold  text-blue-200">TripForge AI</h1>
                          </div>
 
                     </div>
 
-                    <h1 className="text-3xl font-bold text-center">WELCOME BACK</h1>
+                    <h1 className="text-xl font-bold text-center">WELCOME BACK</h1>
 
 
-                    <p className="text-slate-400 text-center mt-2 mb-2">Login to continue your journey with TripForge AI</p>
+                    <p className="text-slate-400 text-center text-sm mt-2 ">Login to continue your journey with TripForge AI</p>
 
-                    <div className="mt-8">
+                    <div className="mt-4">
                     <form className="8 space-y-5 " onSubmit={handleSubmit}>
                         <div>
                             <label className="text-sm text-slate-300 ">Email</label>
@@ -77,7 +77,7 @@ function Login(){
             </div>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-2">
             <label className="text-sm text-slate-300">Password</label>
             <div className="mt-2 flex items-center gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3">
               <Lock size={18} className="text-slate-500" />
@@ -96,7 +96,7 @@ function Login(){
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold mt-3"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold mt-1"
           >
             Login
           </button>
@@ -104,7 +104,7 @@ function Login(){
 
         </div>
 
-        <p className="text-center text-slate-400 text-sm mt-6">
+        <p className="text-center text-slate-300 text-sm mt-2">
           Don't have an account?{" "}
           <Link to="/signup" className="text-blue-500 hover:text-blue-400 font-medium">
             Sign up

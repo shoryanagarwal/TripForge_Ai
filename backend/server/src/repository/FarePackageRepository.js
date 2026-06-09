@@ -18,6 +18,20 @@ class FarePackageRepository{
 
         try{
             const farePackages = await FarePackage.findAll({where:{flightId}});
+            if (farePackages.length === 0) {
+                return [
+                    {
+                    id: "default",
+                    name: "Standard Fare",
+                    price: 0,
+                    features: [
+                        "Standard booking",
+                        "Basic baggage included",
+                        "Regular cancellation rules",
+                    ],
+                    },
+                ];
+                }
             return farePackages;
         }
         catch(error){

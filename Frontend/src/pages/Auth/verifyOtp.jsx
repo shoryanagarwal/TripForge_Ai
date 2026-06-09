@@ -36,14 +36,14 @@
        return (
 
             <div className="min-h-screen bg-[#020617] text-white flex items-center justify-center px-4">
-                <div className="w-full max-w-md bg-[#0f172a] border border-slate-800 rounded-2xl p-8 shadow-2xl">
+                <div className="w-full max-w-sm bg-[#0B132B] border border-slate-800 rounded-2xl p-5 shadow-2xl">
 
                     <div className="flex justify-center mb-6">
-                        <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center">
-                            <Plane size={28} />
+                        <div className="h-10 w-10 rounded-2xl bg-blue-600 flex items-center justify-center">
+                            <Plane size={18} />
                         </div>
                         <div className="flex items-center">
-                         <h1 className="text-2xl font-bold ml-2 text-cyan-300">TripForge AI</h1>
+                         <h1 className="text-2xl font-bold ml-2 text-blue-200">TripForge AI</h1>
                          </div>
 
                     </div>

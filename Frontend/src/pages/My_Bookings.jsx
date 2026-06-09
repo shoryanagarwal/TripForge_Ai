@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import api from '../../api/axios.js'
+import api from '../api/axios.js'
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ function MyBookings(){
 
     useEffect(()=>{
 
-            const fetchBookings=async()=>{
+            const flightFetchBookings=async()=>{
 
                 try{
 
@@ -24,7 +24,13 @@ function MyBookings(){
 
 
 
-                    setBookings(activeBooking);
+                    setBookings((prev) => [
+                      ...prev,
+                      ...activeBooking.map((booking) => ({
+                        ...booking,
+                        type: "flight",
+                      })),
+                    ]);
                     toast.success("Bookings fetched successfully")
 
                 }
@@ -38,7 +44,41 @@ function MyBookings(){
             }
 
 
-            fetchBookings();
+            flightFetchBookings();
+
+
+
+    },[])
+
+
+    //bus bookings
+    useEffect(()=>{
+
+        const busFetchBookings=async()=>{
+        
+            try{
+
+              const response= await api.get('/mybusbookings');
+              const activeBookings=response.data.data.filter(booking=> booking.status !=='cancelled')
+               setBookings((prev) => [
+                ...prev,
+                ...activeBookings.map((booking) => ({
+                  ...booking,
+                  type: "bus",
+                })),
+              ]);
+              toast.success("Bus bookings fetched successfully")
+
+            }
+            catch(error){
+              console.log("Error in fetching bus bookings",error)
+              toast.error(error.response.data.message || 'Something went wrong')
+            }
+
+
+        }
+
+        busFetchBookings();
 
 
 
@@ -62,11 +102,11 @@ function MyBookings(){
             >
             <div>
                 <h2 className="text-xl font-semibold">
-                {booking.flight?.flightNumber}
+                {booking.flight?.flightNumber || booking.bus?.busNumber}
                 </h2>
 
                 <p className="text-slate-400 mt-1">
-                {booking.flight?.source} → {booking.flight?.destination}
+                {booking.flight ? `${booking.flight.source} → ${booking.flight.destination}` : `${booking.bus.source} → ${booking.bus.destination}`}
                 </p>
 
                 <p className="mt-3">Seats: {booking.seats}</p>
@@ -75,7 +115,14 @@ function MyBookings(){
             </div>
 
             <button 
-                onClick={() => navigate(`/booking/${booking.id}`, { state: { booking } })}
+              onClick={()=>{
+                if(booking.type === 'flight'){
+                    navigate(`/booking/${booking.id}`,{state:{booking}})
+                }
+                else if(booking.type === 'bus'){
+                    navigate(`/busbooking/${booking.id}`,{state:{busbooking:booking}})
+                }
+              }}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl">
                 View Details
             </button>

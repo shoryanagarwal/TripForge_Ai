@@ -19,6 +19,7 @@ class FarePackageService{
     async getFarePackagesByFlight(flightId){
         try{
             const farePackages = await farePackageRepository.getFarePackagesByFlight(flightId);
+            console.log("Fare packages for flight",flightId,farePackages)
             return farePackages;
         }
         catch(error){

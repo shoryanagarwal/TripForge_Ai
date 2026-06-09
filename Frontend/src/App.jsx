@@ -9,8 +9,17 @@ import Flight from './pages/Flights/Flight.jsx'
 import {Toaster} from 'react-hot-toast'
 import FlightBooking from'./pages/Flights/Flight_Bookings.jsx'
 import FlightPayment from './pages/Flights/Flight_Payment.jsx'
-import MyBookings from './pages/Flights/My_Bookings.jsx'
+import MyBookings from './pages/My_Bookings.jsx'
 import BookingDetails from './pages/Flights/bookingDetails.jsx'
+
+
+
+import Buses from './pages/Bus/Buses.jsx'
+import BusBooking from './pages/Bus/BusBooking.jsx'
+import BusPayment from './pages/Bus/BusPayment.jsx'
+import BusBookingDetails from './pages/Bus/BusBookingDetails.jsx'
+
+import Ai_Assistant from './pages/Ai_Assistant.jsx'
 
 
 function App() {
@@ -32,6 +41,14 @@ function App() {
           <Route path='/my-bookings' element={<MyBookings/>}/>
 
           <Route path='/booking/:id' element={<BookingDetails/>}/>
+
+
+
+          <Route path='/buses' element={<Buses/>}/>
+          <Route path='/buses/:id/book' element={<BusBooking/>}/>
+          <Route path='/buspayment' element={<BusPayment/>}/>
+          <Route path='/busbooking/:id' element={<BusBookingDetails/>}/>
+          <Route path='/assistant' element={<Ai_Assistant/>}/>
 
 
         </Routes>

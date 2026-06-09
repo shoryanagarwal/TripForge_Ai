@@ -8,12 +8,13 @@ import { CheckCircle, Download, XCircle } from 'lucide-react';
 
 
 
-function BookingDetails(){
+function BusBookingDetails(){
 
     const navigate=useNavigate();
     const location=useLocation();
 
-    const booking=location.state?.booking;
+    const booking=location.state?.busbooking;
+    console.log("Booking details:",booking);
 
     if(!booking){
         return (
@@ -29,15 +30,17 @@ function BookingDetails(){
 
     const handleCancel=async()=>{
         try{
-            const response = await api.patch(`/bookings/${booking.id}/cancel`,)
+            const response = await api.patch(`/busbookings/${booking.id}/cancel`)
             toast.success("Booking cancelled successfully");
-            navigate('/my-bookings',{replace:true}) //replace to prevent going back to cancelled booking details
+            navigate('/my-bookings',{replace:true})
         }
         catch(error){
             console.log("Error in cancelling booking",error)
             toast.error(error.response.data.message || 'Something went wrong')
         }
     }
+
+
 
 
          return (
@@ -57,13 +60,13 @@ function BookingDetails(){
 
                 <div className="mt-6 bg-[#0f172a] border border-slate-800 rounded-2xl p-6">
                
-                <h2 className="text-xl font-semibold mb-4">Flight Details</h2>
+                <h2 className="text-xl font-semibold mb-4">Bus Details</h2>
 
                
-                <p className="text-2xl font-bold">{booking.flight?.flightNumber}</p>
+                <p className="text-2xl font-bold">{booking.bus?.busNumber}</p>
                
                 <p className="text-slate-400 mt-1">
-                    {booking.flight?.source} → {booking.flight?.destination}
+                    {booking.bus?.source} → {booking.bus?.destination}
                 </p>
 
                
@@ -71,12 +74,12 @@ function BookingDetails(){
                
                     <p>
                     Departure:{" "}
-                    {new Date(booking.flight?.departureTime).toLocaleString()}
+                    {new Date(booking.bus?.departureTime).toLocaleString()}
                     </p>
                
                     <p>
                     Arrival:{" "}
-                    {new Date(booking.flight?.arrivalTime).toLocaleString()}
+                    {new Date(booking.bus?.arrivalTime).toLocaleString()}
                     </p>
                
                     <p>Seats: {booking.seats}</p>
@@ -140,4 +143,4 @@ function BookingDetails(){
 
 
 }
-export default BookingDetails;
+export default BusBookingDetails;

@@ -4,12 +4,12 @@ import api from '../../api/axios.js'
 import { toast } from 'react-hot-toast'
 
 
-function FlightPayment(){
+function BusPayment(){
 
     const location =useLocation();
     const navigate=useNavigate();
 
-    const {flight,passengers,selectedPackage,totalAmount}= location.state || {}
+    const {bus,passengers,totalAmount}= location.state || {}
 
     const [coupon,setCoupon]=useState('');
     const [discount,setDiscount]=useState(0);
@@ -18,7 +18,7 @@ function FlightPayment(){
 
 
 
-    if(!flight || !passengers || !selectedPackage || !totalAmount){
+    if(!bus || !passengers || !totalAmount){
         return (
             <div className="min-h-screen bg-[#020617] text-white flex items-center justify-center">
                 <p>No booking details found.</p>
@@ -29,16 +29,16 @@ function FlightPayment(){
     const applyCoupon=async()=>{
 
         try{
-            if(coupon=='TRIP100'){
+            if(coupon=='TRIP50'){
+                setDiscount(50);
+                toast.success('Coupon applied successfully! ₹50 discount added.')
+            }
+            else if(coupon=='TRIP100'){
                 setDiscount(100);
                 toast.success('Coupon applied successfully! ₹100 discount added.')
             }
-            else if(coupon=='TRIP200'){
-                setDiscount(200);
-                toast.success('Coupon applied successfully! ₹200 discount added.')
-            }
             else if(coupon=='SAVE10'){
-                const discountAmount = Math.round(0.1 * totalAmount);
+                const discountAmount = Math.round(0.1 * baseAmount);
                 setDiscount(discountAmount);
                 toast.success(`Coupon applied successfully! ₹${discountAmount} discount added.`)
             }
@@ -76,22 +76,22 @@ function FlightPayment(){
 
         setLoading(true);
         try{
-            const user=localStorage.getItem('user');
-            const response= await api.post('/bookings',{
+            const user=JSON.parse(localStorage.getItem('user'));
+            const response= await api.post('/busbookings',{
                 userId:user.id,
-                flightId:flight.id,
+                busId:bus.id,
                 seats:passengers.length,
                 passengerDetails:passengers,
                 totalAmount:finalAmount,
             })
 
-
+            console.log("Booking response",response.data);
             const bookingId=response.data.data.id;
-            await api.post('/payments',{
-                bookingId,
+            await api.post('/buspayments',{
+                busBookingId:bookingId,
                 paymentMode,
             })
-            toast.success('Payment successful! Your flight has been booked.')
+            toast.success('Payment successful! Your bus has been booked.')
             navigate('/my-bookings');
         }
 
@@ -108,10 +108,9 @@ function FlightPayment(){
 
     }
 
-    const baseFare=flight.price * passengers.length;
-    const packageCharges=selectedPackage.price * passengers.length;
-    const tax=Math.round(0.18 * (baseFare + packageCharges));
-    const finalAmount=baseFare + packageCharges - discount + tax;
+    const baseFare=bus.price * passengers.length;
+    const tax=Math.round(0.18 * (baseFare ));
+    const finalAmount=baseFare  - discount + tax;
     
 
 
@@ -131,25 +130,25 @@ function FlightPayment(){
                     <div className='lg:col-span-2 space-y-6'>
                     <div className='bg-[#0f172a] border border-slate-800 rounded-2xl p-6'>
 
-                        <h2 className='text-xl font-semibold mb-4'>Flight Summary</h2>
+                        <h2 className='text-xl font-semibold mb-4'>Bus Summary</h2>
 
                         <div className='flex justify-between'>
                             <div>
-                                <p className='text-2xl font-bold'>{flight.flightNumber}</p>
-                                <p className='text-slate-400 mt-1'>{flight.source} → {flight.destination}</p>
+                                <p className='text-2xl font-bold'>{bus.busNumber}</p>
+                                <p className='text-slate-400 mt-1'>{bus.source} → {bus.destination}</p>
                             </div>
 
 
                             <p className="text-blue-500  font-bold text-xl">
-                             ₹{flight.price}
+                             ₹{bus.price}
                             </p> 
 
                         </div>
 
                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5 text-sm text-slate-300">
-                            <p>Departure: {new Date(flight.departureTime).toLocaleString()}</p>
-                            <p>Arrival: {new Date(flight.arrivalTime).toLocaleString()}</p>
-                            <p>Duration: {flight.duration} mins</p>
+                            <p>Departure: {new Date(bus.departureTime).toLocaleString()}</p>
+                            <p>Arrival: {new Date(bus.arrivalTime).toLocaleString()}</p>
+                            <p>Duration: {bus.duration} mins</p>
                         </div>
 
                     </div>
@@ -178,31 +177,16 @@ function FlightPayment(){
                      </div>
 
 
-                      <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6">
-                        <h2 className="text-xl font-semibold mb-4">Selected Package</h2>
-
-                        <p className="text-lg font-semibold">{selectedPackage.name}</p>
-                        <p className="text-blue-500 font-bold mt-1">
-                        + ₹{selectedPackage.price} / passenger
-                        </p>
-
-                        <ul className="mt-4 space-y-2 text-slate-400 text-sm">
-                        {selectedPackage.features?.map((feature) => (
-                            <li key={feature}>• {feature}</li>
-                        ))}
-                        </ul>
-                    </div>
+                      
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6">
                         <h2 className="text-xl font-semibold mb-4">Baggage Policy</h2>
-                        <p className="text-slate-400 text-sm">Cabin baggage: 7 kg</p>
+                        <p className="text-slate-400 text-sm">Carry baggage: 7 kg</p>
                         <p className="text-slate-400 text-sm mt-2">
-                            Check-in baggage: 15 kg
+                             baggage Allowed: 15 kg
                         </p>
-                        <p className="text-slate-400 text-sm mt-2">
-                            One personal item allowed.
-                        </p>
+                        
                         </div>
 
                         <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6">
@@ -239,10 +223,7 @@ function FlightPayment(){
                                 <span>₹{baseFare}</span>
                             </div>
 
-                            <div className="flex justify-between text-slate-400">
-                                <span>Package</span>
-                                <span>₹{packageCharges}</span>
-                            </div>
+                            
 
                             <div className="flex justify-between text-slate-400">
                                 <span>Discount</span>
@@ -260,7 +241,7 @@ function FlightPayment(){
                             <div className="flex gap-2 mt-2">
                                 <input
                                 type="text"
-                                placeholder="TRIP100"
+                                placeholder="TRIP50"
                                 value={coupon}
                                 onChange={(e) => setCoupon(e.target.value)}
                                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 outline-none text-sm text-white"
@@ -321,4 +302,4 @@ function FlightPayment(){
 
 
 
-export default FlightPayment;
+export default BusPayment;

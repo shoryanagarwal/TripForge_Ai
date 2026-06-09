@@ -1,13 +1,13 @@
 import {useState} from 'react'
 import api from '../../api/axios.js'
 import { toast } from 'react-hot-toast'
-import { Plane, Search } from "lucide-react";
+import { Bus, Search } from "lucide-react";
 import {useNavigate} from 'react-router-dom'
 
 
 
 
-function Bus(){
+function Buses(){
     const navigate=useNavigate();
 
    const [query,setQuery]=useState({
@@ -24,9 +24,10 @@ function Bus(){
 
 
         try{
-            const response = await api.get('/',{
+            const response = await api.get('/buses',{
                 params:query
             })
+            console.log(response.data);
 
             setBuses(response.data.data);
             toast.success("buses fetched successfully");
@@ -52,7 +53,7 @@ function Bus(){
             <div className='max-w-6xl mx-auto'>
                 <div className='mb-10'>
                     <h1 className='text-3xl font-bold flex items-center gap-3'>
-                        <Plane className='text-blue-500' />
+                        <Bus className='text-blue-500' />
                         Search Buses
                     </h1>
 
@@ -160,9 +161,9 @@ function Bus(){
  
                 <button className="mt-3 bg-blue-600 hover:bg-blue-700 rounded-xl px-5 py-2 font-semibold"
                     onClick={()=>{
-                        navigate(`/Flight/${flight.id}/book`,{
+                        navigate(`/buses/${bus.id}/book`,{
                             state:{                 // Pass the entire flight object as state to the booking page
-                                flight 
+                                bus 
                             }
                         })
                     }}
@@ -178,4 +179,4 @@ function Bus(){
     </div>
   );
 }
-export default Bus;
+export default Buses;
