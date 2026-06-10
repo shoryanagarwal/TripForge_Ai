@@ -1,7 +1,8 @@
 import {useLocation,useNavigate} from 'react-router-dom'
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import api from '../../api/axios.js'
 import { toast } from 'react-hot-toast'
+
 
 
 function FlightPayment(){
@@ -15,6 +16,7 @@ function FlightPayment(){
     const [discount,setDiscount]=useState(0);
     const [paymentMode,setPaymentMode]=useState('UPI');
     const [loading,setLoading]=useState(false);
+    const [timer,setTimer] =useState(0);
 
 
 
@@ -25,6 +27,15 @@ function FlightPayment(){
             </div>
         );
     }
+
+    useEffect(()=>{
+
+
+
+
+
+    })
+
 
     const applyCoupon=async()=>{
 
@@ -66,6 +77,10 @@ function FlightPayment(){
 
 
     }
+
+
+
+
 
 
 

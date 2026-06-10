@@ -120,7 +120,14 @@ router.post('/fare-packages',authenticatorUser,isadmin,farePackageController.cre
 router.get('/flights/:flightId/fare-packages',authenticatorUser,farePackageController.getFarePackagesByFlight);
 
 
+//Notification routes
+const NotificationController=require('../../controller/Notification_Controller.js')
+const notificationController=new NotificationController();
 
+router.post('/notifications',notificationController.create);
+router.get('/users/:id/notifications',notificationController.getNotificationsByUserId);
+router.get('/notifications/:id',notificationController.getNotificationById);
+router.patch('/notifications/:id/read',notificationController.updateNotification);
 
 
 

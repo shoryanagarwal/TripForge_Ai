@@ -7,6 +7,10 @@ const sendEmail = require('../utils/emailService.js');
 const generateTicket=require('../utils/flightpdfGenerate.js')
  const fs = require("fs");
 
+
+ const NotificationService=require('./Notification_Service.js')
+ const notificationService=new NotificationService();
+
 class PaymentService{
 
     async createPayment(data){
@@ -48,6 +52,16 @@ class PaymentService{
             },transaction);
 
             booking.status='confirmed';
+
+            if(booking.status==='confirmed'){
+                await notificationService.createNotification({
+                    userId: booking.userId,
+                    title: "Booking Confirmed",
+                    message: `Your booking has been confirmed successfully.`,
+                    type: "BOOKING_CONFIRMED",
+                })
+            }
+
             await booking.save({transaction});
 
 

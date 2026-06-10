@@ -2,6 +2,9 @@ const {sequelize,Flight,Flight_Booking,User}= require('../models')
 
 const BookingRepository = require('../repository/bookingRepository.js')
 const sendEmail = require('../utils/emailService.js');
+const NotificationService=require('./Notification_Service.js')
+const notificationService=new NotificationService();
+
 
 const bookingRepository = new BookingRepository()
 
@@ -193,7 +196,7 @@ class BookingService{
             }
 
             const now= new Date();
-            const departureTime= f.dataValues.departureTime
+            const departureTime= flight.dataValues.departureTime
             if(now >= departureTime){
                 throw new Error("Cannot cancel booking for flight that has already departed")
             }
@@ -207,6 +210,19 @@ class BookingService{
             }
 
             booking.status='cancelled';
+            
+            if(booking.status==='cancelled'){
+                await notificationService.createNotification({
+                    userId: booking.userId,
+                    title: "Booking Cancelled",
+                    message: `Your booking has been Cancelled successfully.`,
+                    type: "BOOKING_CANCELLED",
+                })
+            }
+
+
+
+
           if(role === 'ADMIN'){
                 booking.cancelledBy="ADMIN"
                 booking.cancellationReason="Cancelled by admin"

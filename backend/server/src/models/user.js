@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey:'userId',
         as:'bookings'
       })
+      User.hasMany(models.Notification,{
+        foreignKey:'userId',
+        as:'notifications'
+      })
       
     }
   }

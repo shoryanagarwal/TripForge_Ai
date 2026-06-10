@@ -20,6 +20,7 @@ import BusPayment from './pages/Bus/BusPayment.jsx'
 import BusBookingDetails from './pages/Bus/BusBookingDetails.jsx'
 
 import Ai_Assistant from './pages/Ai_Assistant.jsx'
+import Notification from './pages/Home/Notification.jsx'
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route path='/buspayment' element={<BusPayment/>}/>
           <Route path='/busbooking/:id' element={<BusBookingDetails/>}/>
           <Route path='/assistant' element={<Ai_Assistant/>}/>
+          <Route path="/notifications" element={<Notification />} />
 
 
         </Routes>

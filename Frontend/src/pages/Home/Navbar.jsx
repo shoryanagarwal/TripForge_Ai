@@ -1,9 +1,9 @@
 import {Plane,UserCircle,Bell,ChevronDown} from 'lucide-react';
-
-
+import {useNavigate} from 'react-router-dom'
 
 function Navbar(){
 
+const navigate=useNavigate();
     return(
         <nav className="border-b border-slate-800 bg-[#0f172a]">
 
@@ -23,9 +23,9 @@ function Navbar(){
 
 
                     <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-1 cursor-pointer">
+                        <button className="flex items-center gap-1 cursor-pointer" onClick={()=>navigate('/notifications')}>
                         <Bell size={22} className=" cursor-pointer"/>
-                        </div>
+                        </button>
 
                         <div className="flex items-center gap-2 cursor-pointer">
                         <UserCircle size={22} className="cursor-pointer"/>

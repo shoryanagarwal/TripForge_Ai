@@ -64,7 +64,7 @@ function Flight(){
 
 
                 <form onSubmit={handleSearch}
-                    className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-4 gap-4"
+                    className="bg-[#0f172a] border border-slate-300 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-4 gap-4"
                 >
                     <input
                         type="text"

@@ -4,7 +4,8 @@ const BusBookingRepository = require('../repository/busBookingRepository.js');
 const sendEmail = require('../utils/emailService.js');
 
 const busbookingRepository = new BusBookingRepository()
-
+const NotificationService=require('./Notification_Service.js')
+const notificationService=new NotificationService();
 class BusBookingService{
 
     async createBooking(data){
@@ -203,6 +204,15 @@ class BusBookingService{
             }
 
             booking.status='cancelled';
+
+            if(booking.status==='cancelled'){
+                await notificationService.createNotification({
+                    userId: booking.userId,
+                    title: "Booking Cancelled",
+                    message: `Your booking has been Cancelled successfully.`,
+                    type: "BOOKING_CANCELLED",
+                })
+            }
 
             await bus.save({transaction});
             await booking.save({transaction});
