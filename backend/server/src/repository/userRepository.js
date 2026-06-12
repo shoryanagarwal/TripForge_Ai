@@ -42,6 +42,9 @@ class UserRepository{
     }
 
 
+
+    
+
     async findById(id){
         try{
             const user=await User.findByPk(id);

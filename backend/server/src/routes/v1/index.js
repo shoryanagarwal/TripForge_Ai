@@ -1,5 +1,5 @@
 const express = require('express');
-
+const {User}=require('../../models')
 const router=express.Router();
 
 const AuthController=require('../../controller/authController.js')
@@ -11,17 +11,28 @@ router.post('/signup',authcontroller.signup);
 router.post('/login',authcontroller.login);
 
 
-router.get('/profile',authenticatorUser,(req,res)=>{
-        res.status(200).json({
-                message:"User profile",
-                success:true,
-                data:{
-                        user:req.user
-                },
-                err:{}
-        })
-
-})
+router.get('/profile',authenticatorUser,async(req,res)=>{
+        try{
+                const user=await User.findByPk(req.user.id,{
+                       attributes: ["id", "name", "email", "role"]
+                })
+                res.status(200).json({
+                        message: "User profile",
+                        success: true,
+                        data: {
+                                user,
+                        },
+                        err: {},
+                });
+                } catch (error) {
+                        res.status(500).json({
+                        message: "Error fetching profile",
+                        success: false,
+                        data: {},
+                        err: error.message,
+                });
+  }
+});
 
 
 
