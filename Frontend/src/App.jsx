@@ -21,7 +21,7 @@ import BusBookingDetails from './pages/Bus/BusBookingDetails.jsx'
 
 import Ai_Assistant from './pages/Ai_Assistant.jsx'
 import Notification from './pages/Home/Notification.jsx'
-
+import Profile from './pages/Home/UserProfile.jsx'
 
 function App() {
 
@@ -51,6 +51,7 @@ function App() {
           <Route path='/busbooking/:id' element={<BusBookingDetails/>}/>
           <Route path='/assistant' element={<Ai_Assistant/>}/>
           <Route path="/notifications" element={<Notification />} />
+          <Route path='/profile' element={<Profile/>}/>
 
 
         </Routes>

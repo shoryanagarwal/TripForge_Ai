@@ -16,8 +16,12 @@ function Navbar(){
           const fetchNotification=async()=>{
 
                 try{
-                    const user= localStorage.getItem('user');
+                    const user= JSON.parse(localStorage.getItem('user'));
 
+                    if (!user?.id) {
+                        console.log("User id not found in localStorage");
+                        return;
+                    }
                     const response =await api.get(`/users/${user.id}/notifications`);
 
                     setNotifications(response.data.data)
@@ -35,7 +39,7 @@ function Navbar(){
 
 
          
-    })
+    },[])
      const unreadCount=notifications.filter(noti=>!noti.isRead).length;
 
 
@@ -70,7 +74,9 @@ function Navbar(){
                         </div>
 
                         <div className="flex items-center gap-2 cursor-pointer">
+                        <button onClick={()=>navigate('/profile')}>
                         <UserCircle size={22} className="cursor-pointer"/>
+                        </button>
                         <h3 className='text-sm font-semibold'>Hi Traveller</h3>
                             <ChevronDown size={16} className="text-slate-400"/>
                         </div>
