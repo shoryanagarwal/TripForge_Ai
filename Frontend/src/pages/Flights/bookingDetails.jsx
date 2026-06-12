@@ -31,7 +31,7 @@ function BookingDetails(){
         try{
             const response = await api.patch(`/bookings/${booking.id}/cancel`,)
             toast.success("Booking cancelled successfully");
-            navigate('/my-bookings',{replace:true}) //replace to prevent going back to cancelled booking details
+            navigate('/home',{replace:true}) //replace to prevent going back to cancelled booking details
         }
         catch(error){
             console.log("Error in cancelling booking",error)

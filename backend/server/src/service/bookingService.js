@@ -79,6 +79,10 @@ class BookingService{
 
             },transaction);
 
+            flight.availableSeats= flight.availableSeats - seats;
+
+            await flight.save({transaction});
+
 
             await transaction.commit();
             return booking;

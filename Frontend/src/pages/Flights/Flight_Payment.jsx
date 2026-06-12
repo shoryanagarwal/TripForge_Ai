@@ -10,13 +10,16 @@ function FlightPayment(){
     const location =useLocation();
     const navigate=useNavigate();
 
-    const {flight,passengers,selectedPackage,totalAmount}= location.state || {}
+    const {flight,passengers,selectedPackage,totalAmount,booking}= location.state || {}
 
     const [coupon,setCoupon]=useState('');
     const [discount,setDiscount]=useState(0);
     const [paymentMode,setPaymentMode]=useState('UPI');
     const [loading,setLoading]=useState(false);
     const [timer,setTimer] =useState(0);
+
+
+    console.log("booking expiry time",booking.expiresAt);
 
 
 
@@ -31,10 +34,45 @@ function FlightPayment(){
     useEffect(()=>{
 
 
+        if(!booking.expiresAt) return;
+
+        const interval= setInterval(()=>{
+            const expiryTime=new Date(booking.expiresAt).getTime();
+            const currentTime= new Date().getTime();
+
+
+            const difference=expiryTime-currentTime;
+
+            if(difference<=0){
+                clearInterval(interval);
+                setTimer(0);
+                toast.error('Booking session expired. Please start again.');
+                navigate('/home',{replace:true});
+            }
+            else{
+                setTimer(difference);
+            }
+        },1000) // update every second
+
+
+        return ()=> clearInterval(interval);
+
+
+    },[booking.expiresAt])
+
+
+    const formatTime=(ms)=>{
+
+        const totalSeconds=Math.floor(ms/1000);
+        const minutes=Math.floor(totalSeconds/60);
+        const seconds=totalSeconds % 60;
 
 
 
-    })
+        return `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`; //what is padStart? it adds leading zeros if minutes or seconds are less than 10 to maintain consistent formatting
+
+
+    }
 
 
     const applyCoupon=async()=>{
@@ -91,23 +129,14 @@ function FlightPayment(){
 
         setLoading(true);
         try{
-            const user=localStorage.getItem('user');
-            const response= await api.post('/bookings',{
-                userId:user.id,
-                flightId:flight.id,
-                seats:passengers.length,
-                passengerDetails:passengers,
-                totalAmount:finalAmount,
-            })
-
-
-            const bookingId=response.data.data.id;
+           
+            const bookingId=booking.id;
             await api.post('/payments',{
                 bookingId,
                 paymentMode,
             })
             toast.success('Payment successful! Your flight has been booked.')
-            navigate('/my-bookings');
+                    navigate(`/booking/${booking.id}`,{state:{booking}})
         }
 
         catch(error){
@@ -137,6 +166,11 @@ function FlightPayment(){
         <div className="min-h-screen bg-[#020617] text-white px-6 py-8">
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-3xl font-bold mb-2">Review And Payment</h1>
+                <div className="mt-6 bg-red-500/10 border border-red-500/30 rounded-xl p-3 text-center">
+                <p className="text-sm text-red-400 font-semibold">
+                    Complete payment within {formatTime(timer)} to avoid booking cancellation
+                </p>
+                </div>
                 <p className='text-slate-400 mb-8'>
                     Review your journey details before confirming payment
                 </p>
@@ -313,13 +347,12 @@ function FlightPayment(){
                             </div>
 
                             <button
-                                disabled={loading}
+                                disabled={loading || timer<=0}
                                 onClick={handlePayment}
                                 className={`mt-6 w-full rounded-xl py-3 font-semibold ${
-                                    loading
+                                loading || timer <= 0
                                     ? "bg-slate-700 cursor-not-allowed"
-                                    : "bg-blue-600 hover:bg-blue-700"
-                                }`}
+                                    : "bg-blue-600 hover:bg-blue-700"}`}
                                 >
                                 {loading ? "Processing..." : "Proceed to Payment"}
                                 </button>

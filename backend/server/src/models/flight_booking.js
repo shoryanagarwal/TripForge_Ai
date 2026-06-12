@@ -88,7 +88,7 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     cancelledBy:{
-      type:DataTypes.ENUM("user","admin","system"),
+      type:DataTypes.ENUM("USER","ADMIN","SYSTEM"),
       allowNull:true
 
     },

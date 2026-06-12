@@ -106,7 +106,7 @@ function FlightBooking(){
 
 
 
-    const ContinueHandler=()=>{
+    const ContinueHandler=async()=>{
         if(passengers.length===0){
             toast.error('Please add at least one passenger to continue.');
             return;
@@ -120,15 +120,33 @@ function FlightBooking(){
         const baseAmount=passengers.length * flight.price;
 
         const packageAmount= passengers.length * selectedPackage.price;
+        const taxAmount= Math.round(0.18 * (baseAmount + packageAmount));
 
-        const totalAmount=baseAmount + packageAmount;
+        const totalAmount=baseAmount + packageAmount+ taxAmount;
+
+          const user=JSON.parse(localStorage.getItem('user'));
+            const response= await api.post('/bookings',{
+                userId:user.id,
+                flightId:flight.id,
+                seats:passengers.length,
+                passengerDetails:passengers,
+                totalAmount:totalAmount,
+                status:'pending'
+            })
+
+            const booking =response.data.data
+
+            
+
+
 
         navigate('/payment',{
             state:{
                 flight,
                 passengers,
                 selectedPackage,
-                totalAmount
+                totalAmount,
+                booking
             }
         })
 

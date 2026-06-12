@@ -8,7 +8,7 @@ const {sequelize} = require('../models');
 
 
 
-cron.schedule('* * * * *',async()=>{
+cron.schedule('* * * * *',async()=>{ 
 
     console.log('Running the cron job to expire bookings');
     const transaction = await sequelize.transaction();
@@ -45,7 +45,7 @@ cron.schedule('* * * * *',async()=>{
 
 
             booking.status='cancelled';
-            booking.cancelledBy="system";
+            booking.cancelledBy="SYSTEM";
             booking.cancellationReason="Booking expired due to non-payment";
             booking.cancelledAt=new Date();
 
