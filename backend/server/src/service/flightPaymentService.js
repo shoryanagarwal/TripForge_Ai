@@ -52,17 +52,29 @@ class PaymentService{
             },transaction);
 
             booking.status='confirmed';
+            await booking.save({transaction});
 
+            let notification=null;
             if(booking.status==='confirmed'){
-                await notificationService.createNotification({
+                notification= await notificationService.createNotification({
                     userId: booking.userId,
                     title: "Booking Confirmed",
                     message: `Your booking has been confirmed successfully.`,
                     type: "BOOKING_CONFIRMED",
                 })
-            }
 
-            await booking.save({transaction});
+                console.log("Notification created:", notification.id);
+                
+            }
+            if(global.io && notification){
+                global.io.to(booking.userId).emit('notification',notification);
+                
+                console.log("Emitted notification to user",booking.userId)
+            }
+            
+
+
+
 
 
 

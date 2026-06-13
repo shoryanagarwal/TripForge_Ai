@@ -20,7 +20,7 @@ class NotificationService{
     async getNotificationsByUserId(userId){
         try{
             const response= await notificationRepository.getNotificationByUserId(userId);
-            console.log("Notifications fetched for user in service layer",userId,response);
+            
             if(!response){
                 throw new Error("No notifications found for this user")
             }

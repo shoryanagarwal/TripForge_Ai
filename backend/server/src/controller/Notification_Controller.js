@@ -35,7 +35,6 @@ class NotificationController{
         try{
             const userId=req.params.id;
             const response=await notificationService.getNotificationsByUserId(userId);
-            console.log("Notifications fetched for user",userId,response);
             res.status(200).json({
                 success:true,
                 message:"Notifications fetched successfully",

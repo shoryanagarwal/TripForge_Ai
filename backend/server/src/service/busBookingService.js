@@ -104,7 +104,6 @@ class BusBookingService{
     async getBusBookingById(bookingId){
             try{
                 const booking = await busbookingRepository.getBookingById(bookingId);
-                console.log("Booking in service layer",booking)
                 if(!booking){
                     throw new Error("Booking not found")
                 }

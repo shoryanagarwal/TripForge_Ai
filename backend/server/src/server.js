@@ -1,15 +1,26 @@
 const dotenv=require('dotenv')
+const app = require("./app");
+const http = require('http');
+
+const server= http.createServer(app)
+const {Server} = require('socket.io');
+const io=new Server(server,{
+    cors:{
+        origin:'*'
+    }
+})
+global.io=io;
 
 const sequelize = require('./config/database.js');
 dotenv.config();
 
 
-const app = require("./app");
 
-require('./jobs/flightexpireBooking.js')
-require('./jobs/flightreminderBooking.js')
-require('./jobs/busexpireBooking.js')
-require('./jobs/busRemainder.js')
+
+// require('./jobs/flightexpireBooking.js')
+// require('./jobs/flightreminderBooking.js')
+// require('./jobs/busexpireBooking.js')
+// require('./jobs/busRemainder.js')
 const PORT = process.env.PORT || 3000;
 
 const startServer= async()=>{
@@ -20,11 +31,25 @@ const startServer= async()=>{
         console.log("Connection has been established successfully.");
 
         
-        app.listen(PORT,()=>{
-            console.log(`Server is running on port ${PORT}`);
+        io.on('connection',(socket)=>{
+            console.log('a user connected',socket.id);
             
+            socket.on('join',(userId)=>{
+                socket.join(userId)
+                console.log(`User ${userId} joined room`);
+            })
+
+
+            socket.on('disconnect',()=>{
+                console.log('user disconnected',socket.id);
+            }   )
+
         })
 
+
+        server.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        })
 
 
 

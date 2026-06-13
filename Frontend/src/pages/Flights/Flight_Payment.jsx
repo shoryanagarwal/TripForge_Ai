@@ -136,7 +136,8 @@ function FlightPayment(){
                 paymentMode,
             })
             toast.success('Payment successful! Your flight has been booked.')
-                    navigate(`/booking/${booking.id}`,{state:{booking}})
+            const bookingResponse= await api.get(`/bookings/${bookingId}`);
+                    navigate(`/booking/${booking.id}`,{state:{booking:bookingResponse.data.data}})
         }
 
         catch(error){

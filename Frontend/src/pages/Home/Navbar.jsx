@@ -2,6 +2,7 @@ import {Plane,UserCircle,Bell,ChevronDown} from 'lucide-react';
 import {useNavigate} from 'react-router-dom'
 import api from '../../api/axios.js'
 import { useState,useEffect } from 'react';
+import socket from '../../Socket.js'
 
 
 function Navbar(){
@@ -11,7 +12,13 @@ function Navbar(){
 
 
 
+    
+
+
     useEffect(()=>{
+
+
+        
 
           const fetchNotification=async()=>{
 
@@ -62,7 +69,7 @@ function Navbar(){
 
 
                     <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-1 cursor-pointer" onClick={()=>navigate('/notifications')}>
+                        <div className=" relative flex items-center gap-1 cursor-pointer" onClick={()=>navigate('/notifications')}>
                         <Bell size={22} className=" cursor-pointer"/>
                         
                         {unreadCount>0 &&(

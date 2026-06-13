@@ -32,7 +32,7 @@ class NotificationRepository{
                 order:[['createdAt','DESC']] // Latest notifications first
             })
 
-            console.log("Notifications fetched for user in repository layer",userId,response);
+           
 
             return response;
 

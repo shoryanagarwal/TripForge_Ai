@@ -12,7 +12,7 @@ import FlightPayment from './pages/Flights/Flight_Payment.jsx'
 import MyBookings from './pages/My_Bookings.jsx'
 import BookingDetails from './pages/Flights/bookingDetails.jsx'
 
-
+import SocketNotification from './socket_noti.jsx'
 
 import Buses from './pages/Bus/Buses.jsx'
 import BusBooking from './pages/Bus/BusBooking.jsx'
@@ -29,6 +29,8 @@ function App() {
     <>
        <BrowserRouter>
        <Toaster position="top-right" />
+
+       <SocketNotification />
        
         <Routes>
 
@@ -55,6 +57,8 @@ function App() {
 
 
         </Routes>
+        
+       
        
        
        
