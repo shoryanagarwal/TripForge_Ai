@@ -74,6 +74,9 @@ class BusBookingService{
 
             },transaction);
 
+            bus.availableSeats -= seats;
+            await bus.save({transaction});
+
 
             await transaction.commit();
             return booking;
@@ -150,7 +153,7 @@ class BusBookingService{
 
 
 
-    async cancelBooking(bookingId,userId){
+    async cancelBooking(bookingId,userId,role){
     
         const transaction = await sequelize.transaction();
 
@@ -178,17 +181,20 @@ class BusBookingService{
                 throw new Error("Booking is already cancelled")
             }
 
-            const now= new Date();
-            const departureTime= booking.bus.departureTime;
-            if(now >= departureTime){
-                throw new Error("Cannot cancel booking for bus that has already departed")
-            }
-
             const bus= await Bus.findByPk(booking.busId,{
                 transaction,
                 lock:transaction.LOCK.UPDATE
 
             })
+
+            const now= new Date();
+        
+            const departureTime= bus.departureTime;
+            if(now >= departureTime){
+                throw new Error("Cannot cancel booking for bus that has already departed")
+            }
+
+            
             if(!bus){
                 throw new Error("Associated bus not found")
             }
@@ -212,6 +218,17 @@ class BusBookingService{
                     type: "BOOKING_CANCELLED",
                 })
             }
+
+
+            if(role==='ADMIN'){
+                 booking.cancelledBy="ADMIN"
+                booking.cancellationReason="Cancelled by admin"
+            }
+            else{
+                booking.cancelledBy="USER"
+                booking.cancellationReason="Cancelled by user"
+            }
+            booking.cancelledAt=new Date();
 
             await bus.save({transaction});
             await booking.save({transaction});
@@ -256,7 +273,7 @@ class BusBookingService{
 
             })
 
-            return booking;
+            return fullBooking;
             
 
         }

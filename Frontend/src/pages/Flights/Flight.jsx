@@ -27,7 +27,7 @@ function Flight(){
             const response = await api.get('/flights',{
                 params:query
             })
-            console.log("Flight search response",response.data.data);
+           
             setFlights(response.data.data);
             toast.success("Flights fetched successfully");
 

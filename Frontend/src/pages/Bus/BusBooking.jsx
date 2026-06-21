@@ -76,7 +76,7 @@ function BusBooking(){
 
 
 
-    const ContinueHandler=()=>{
+    const ContinueHandler=async()=>{
         if(passengers.length===0){
             toast.error('Please add at least one passenger to continue.');
             return;
@@ -87,7 +87,22 @@ function BusBooking(){
         const baseAmount=passengers.length * bus.price;
         const totalAmount= baseAmount + Math.round(0.18 * baseAmount);
 
-       
+       const user =JSON.parse(localStorage.getItem('user'));
+
+       const response=await api.post('/busbookings',{
+            busId:bus.id,
+            userId:user.id,
+            seats:passengers.length,
+            totalAmount,
+            passengerDetails:passengers,
+            status:'pending'
+        })
+
+
+        const booking=response.data.data
+            
+            
+          
 
         
 
@@ -95,6 +110,7 @@ function BusBooking(){
             state:{
                 bus,
                 passengers,
+                booking,
                 
                 totalAmount,
             }

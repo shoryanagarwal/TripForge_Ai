@@ -181,9 +181,7 @@ class BookingService{
                 lock:transaction.LOCK.UPDATE
 
             })
-            console.log("Booking to be cancelled",booking)
-            console.log("User id from request",userId)
-            console.log("User role from request",role)
+           
 
             console.log("Booking user id",flight)
 

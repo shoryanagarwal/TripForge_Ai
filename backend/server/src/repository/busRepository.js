@@ -18,7 +18,7 @@ class BusRepository{
         }
         catch(error){
 
-            console.log("Something went wrong in the repository layer")
+            console.log("Something went wrong in the repository layer",error)
             throw error
 
         }

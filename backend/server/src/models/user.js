@@ -79,7 +79,19 @@ module.exports = (sequelize, DataTypes) => {
     otp_expiry:{
         type: DataTypes.DATE,
         allowNull:true
+    },
+
+    resetOtp:{
+       type: DataTypes.STRING,
+       allowNull:true
+    },
+    resetOtpExpiry:{
+      type: DataTypes.DATE,
+      allowNull:true
+
     }
+
+
   }, {
     sequelize,
     modelName: 'User',

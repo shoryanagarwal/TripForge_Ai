@@ -22,6 +22,7 @@ import BusBookingDetails from './pages/Bus/BusBookingDetails.jsx'
 import Ai_Assistant from './pages/Ai_Assistant.jsx'
 import Notification from './pages/Home/Notification.jsx'
 import Profile from './pages/Home/UserProfile.jsx'
+import ForgotPassword from './pages/Auth/ForgotPassword.jsx'
 
 function App() {
 
@@ -44,6 +45,8 @@ function App() {
           <Route path='/my-bookings' element={<MyBookings/>}/>
 
           <Route path='/booking/:id' element={<BookingDetails/>}/>
+
+          <Route path='/forgot-password' element={<ForgotPassword/>}/>
 
 
 

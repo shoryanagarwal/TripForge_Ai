@@ -72,6 +72,9 @@ class BusService{
             if(query.destination){
                 filter.destination=query.destination
             }
+            if(query.status){
+                filter.status=query.status
+            }
 
             if(query.date){
                 const startDate = new Date(query.date);

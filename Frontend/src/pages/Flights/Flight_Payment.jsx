@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast'
 
 
 
+
 function FlightPayment(){
 
     const location =useLocation();
@@ -17,9 +18,9 @@ function FlightPayment(){
     const [paymentMode,setPaymentMode]=useState('UPI');
     const [loading,setLoading]=useState(false);
     const [timer,setTimer] =useState(0);
+    const [confirming,setConfirming]=useState(false);
 
 
-    console.log("booking expiry time",booking.expiresAt);
 
 
 
@@ -131,13 +132,62 @@ function FlightPayment(){
         try{
            
             const bookingId=booking.id;
-            await api.post('/payments',{
-                bookingId,
-                paymentMode,
-            })
-            toast.success('Payment successful! Your flight has been booked.')
-            const bookingResponse= await api.get(`/bookings/${bookingId}`);
-                    navigate(`/booking/${booking.id}`,{state:{booking:bookingResponse.data.data}})
+           const response = await api.post('/razorpay/create-order',{bookingId});
+
+           const order=response.data.data;
+
+           const options={
+              key:import.meta.env.VITE_RAZORPAY_KEY_ID,
+              amount:order.amount,
+              currency:order.currency,
+              name:'TripForge AI',
+              description:`Payment for booking ${bookingId}`,
+              order_id:order.id,
+
+
+
+              handler:async function(response){
+                setConfirming(true);
+                try{
+                    const result= await api.post('/razorpay/verify-payment',{
+                        razorpay_order_id:response.razorpay_order_id,
+                        razorpay_payment_id:response.razorpay_payment_id,
+                        razorpay_signature:response.razorpay_signature,
+                        bookingId:bookingId,
+                        paymentMode:paymentMode
+
+                    })
+                    toast.success('Payment successful! Your flight is booked.')
+                    
+
+                    const bookingresponse= await api.get(`/bookings/${bookingId}`);
+            
+                    navigate(`/booking/${bookingId}`,{state:{booking:bookingresponse.data.data},replace:true})
+
+
+                }
+                catch(error){
+                    console.log("Error in payment handler",error);
+                    setConfirming(false);
+                    toast.error('Payment failed. Please try again.')
+                }
+              },
+              theme:{
+                color:'#2563eb'
+              }
+
+           }
+
+            const rzpl=new window.Razorpay(options);
+              
+              rzpl.on('payment.failed', function (response){
+                console.log("Payment failed",response.error);
+                toast.error('Payment failed. Please try again.')
+              })
+
+              rzpl.open();
+             
+                
         }
 
         catch(error){
@@ -164,6 +214,16 @@ function FlightPayment(){
 
 
     return(
+        <>
+        {confirming && (
+            <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
+                <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-8 text-center">
+                <p className="text-xl font-bold">Confirming your booking...</p>
+                <p className="text-slate-400 mt-2">Please wait, generating your ticket.</p>
+                </div>
+            </div>
+            )}
+
         <div className="min-h-screen bg-[#020617] text-white px-6 py-8">
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-3xl font-bold mb-2">Review And Payment</h1>
@@ -362,6 +422,8 @@ function FlightPayment(){
                     </div>
                     </div>
                 </div>
+
+                </>
 
 
     )

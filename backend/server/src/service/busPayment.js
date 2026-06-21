@@ -7,6 +7,9 @@ const BusgenerateTicket=require('../utils/buspdfgnerator.js')
  const fs = require("fs");
 const NotificationService=require('./Notification_Service.js')
 const notificationService=new NotificationService();
+
+
+
 class BusPaymentService{
 
     async createPayment(data){
@@ -14,7 +17,7 @@ class BusPaymentService{
 
 
         try{
-            const { busBookingId,paymentMode}=data;
+            const { busBookingId,paymentMode, razorpayOrderId,razorpayPaymentId}=data;
 
             const booking= await Bus_Booking.findByPk(busBookingId,{
                 transaction,
@@ -22,6 +25,7 @@ class BusPaymentService{
             })
 
             if(!booking){
+                console.log("Booking not found")
                 throw new Error("Booking not found")
             }
 
@@ -36,8 +40,7 @@ class BusPaymentService{
             throw new Error("Payment already completed for this booking");
             }
 
-            const transactionId=crypto.randomUUID();
-
+            const transactionId=razorpayPaymentId || crypto.randomBytes(16).toString('hex');
 
             const payment=await busPaymentRepository.createPayment({
                  busBookingId,
@@ -48,9 +51,12 @@ class BusPaymentService{
             },transaction);
 
             booking.status='confirmed';
+            await booking.save({transaction});
+
+            let notification=null;
 
              if(booking.status==='confirmed'){
-                await notificationService.createNotification({
+                notification=await notificationService.createNotification({
                     userId: booking.userId,
                     title: "Booking Confirmed",
                     message: `Your booking has been confirmed successfully.`,
@@ -58,8 +64,11 @@ class BusPaymentService{
                 })
             }
 
-            await booking.save({transaction});
-
+            if(global.io && notification){
+                global.io.to(booking.userId).emit('notification',notification);
+                
+                console.log("Emitted notification to user",booking.userId)
+            }
 
 
             const fullBooking = await Bus_Booking.findByPk(busBookingId,{
@@ -81,6 +90,7 @@ class BusPaymentService{
 
             const remainderTime = new Date(fullBooking.bus.departureTime.getTime()-12 * 60 * 60 * 1000);
             booking.remainderAt = remainderTime;
+            
             await booking.save({transaction});
 
              const pdfPath = await BusgenerateTicket(fullBooking,payment);

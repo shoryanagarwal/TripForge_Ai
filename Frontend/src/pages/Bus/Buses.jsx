@@ -27,7 +27,7 @@ function Buses(){
             const response = await api.get('/buses',{
                 params:query
             })
-            console.log(response.data);
+            
 
             setBuses(response.data.data);
             toast.success("buses fetched successfully");
@@ -162,7 +162,7 @@ function Buses(){
                 <button className="mt-3 bg-blue-600 hover:bg-blue-700 rounded-xl px-5 py-2 font-semibold"
                     onClick={()=>{
                         navigate(`/buses/${bus.id}/book`,{
-                            state:{                 // Pass the entire flight object as state to the booking page
+                            state:{                 // Pass the entire bus object as state to the booking page
                                 bus 
                             }
                         })

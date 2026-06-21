@@ -32,12 +32,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id'
+      }
         
     },
     busId: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Buses',
+        key: 'id'
+      }
     },
     seats: {
       type: DataTypes.INTEGER,
@@ -64,6 +72,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       defaultValue: false
+    },
+    cancelledBy:{
+      type:DataTypes.ENUM("USER","ADMIN","SYSTEM"),
+      allowNull:true
+
+    },
+
+    cancellationReason:{
+      type:DataTypes.STRING,
+      allowNull:true
+    },
+
+    cancelledAt:{
+      type:DataTypes.DATE,
+      allowNull:true
     },
     passengerDetails: {
       type: DataTypes.JSONB,

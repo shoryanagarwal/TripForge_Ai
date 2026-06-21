@@ -92,6 +92,10 @@ function Login(){
                 className="bg-transparent outline-none w-full text-sm text-white placeholder:text-slate-600"
               />
             </div>
+
+            <button className="text-white hover:text-blue-400 text-sm font mt-1 block " onClick={()=>navigate('/forgot-password')}>
+              Forgot password?{" "}
+            </button>
           </div>
 
           <button

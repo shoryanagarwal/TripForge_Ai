@@ -38,8 +38,8 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
 
-    await queryInterface.removeColumn('Flight_Booking','cancelledBy');
-    await queryInterface.removeColumn('Flight_Booking','cancellationReason');
-    await queryInterface.removeColumn('Flight_Booking','cancelledAt');
+    await queryInterface.removeColumn('Flight_Bookings','cancelledBy');
+    await queryInterface.removeColumn('Flight_Bookings','cancellationReason');
+    await queryInterface.removeColumn('Flight_Bookings','cancelledAt');
   }
 };

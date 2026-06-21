@@ -9,6 +9,7 @@ const UserRepository = require('../repository/userRepository.js');
 const sendEmail= require('../utils/emailService.js');
 
 const userRepository = new UserRepository();
+const { User } = require('../models/index.js');
 
 
 
@@ -234,6 +235,96 @@ class Authenticate{
 
         }
 
+
+
+    }
+
+
+    async forgotPassword(data){
+
+        try{
+
+            const {email}=data;
+             
+            const user=await User.findOne({where:{email:email}});
+
+            if(!user){
+                throw new Error("No user found with this email");
+
+            }
+
+            const otp=generateOtp();
+
+            user.resetOtp=bcrypt.hashSync(otp,10);
+            user.resetOtpExpiry=new Date(Date.now()+10*60*1000);
+
+            await user.save();
+
+            await sendEmail({
+                to: email,
+                subject: "TripForge AI - Reset Password OTP",
+                 html: `
+                <h2>Password Reset Request</h2>
+                <p>Hi ${user.name},</p>
+                <p>Your password reset OTP is:</p>
+                <h1>${otp}</h1>
+                <p>This OTP is valid for 10 minutes.</p>
+                <p>If you did not request this, please ignore this email.</p>
+            `
+        
+            })
+
+            return true;
+
+        }
+        catch(error){
+            throw error;
+            console.log("Error in forgot password in service",error);
+
+        }
+
+
+
+    }
+
+
+    async resetPassword(data){
+        try{
+            const {email,otp,newPassword}=data;
+            const user=await User.findOne({where:{email:email}});
+
+            if(!user){
+                throw new Error("No user found with this email");
+            }
+
+            if(!user.resetOtp || !user.resetOtpExpiry){
+                throw new Error("No password reset request found for this email");
+            }
+
+            console.log("Received OTP:", otp);
+            console.log("is otp coorect",bcrypt.compareSync(otp,user.resetOtp)); 
+
+            if(!bcrypt.compareSync(otp,user.resetOtp)){
+                throw new Error("Invalid OTP. Please check the OTP sent to your email.");
+            }
+            if(new Date()>new Date(user.resetOtpExpiry)){
+                throw new Error("OTP has expired. Please request a new password reset.");
+            }
+
+            const hashedpassword=bcrypt.hashSync(newPassword,10);
+            const password=hashedpassword;
+            user.password=password;
+            user.resetOtp=null;
+            user.resetOtpExpiry=null;
+            await user.save();
+
+            return true;
+
+        }
+        catch(error){
+            console.log("Error in reset password in service",error);
+            throw error;
+        }
 
 
     }

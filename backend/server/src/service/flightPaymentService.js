@@ -18,7 +18,7 @@ class PaymentService{
 
 
         try{
-            const {bookingId,paymentMode}=data;
+            const {bookingId,paymentMode, razorpayOrderId,razorpayPaymentId}=data;
 
             const booking= await Flight_Booking.findByPk(bookingId,{
                 transaction,
@@ -40,7 +40,7 @@ class PaymentService{
             throw new Error("Payment already completed for this booking");
             }
 
-            const transactionId=crypto.randomUUID();
+            const transactionId=razorpayPaymentId || crypto.randomBytes(16).toString('hex');
 
 
             const payment=await paymentRepository.createPayment({
@@ -63,7 +63,7 @@ class PaymentService{
                     type: "BOOKING_CONFIRMED",
                 })
 
-                console.log("Notification created:", notification.id);
+                
                 
             }
             if(global.io && notification){
@@ -97,6 +97,8 @@ class PaymentService{
 
             const remainderTime = new Date(fullBooking.flight.departureTime.getTime()-12 * 60 * 60 * 1000);
             booking.remainderAt = remainderTime;
+
+            
             await booking.save({transaction});
 
             const pdfPath = await generateTicket(fullBooking,payment);

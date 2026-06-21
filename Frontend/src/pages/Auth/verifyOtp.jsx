@@ -12,6 +12,26 @@
             const location = useLocation();
             const [otp,setOtp]=useState('');
             const email =location.state?.email || '' //location hook kya hai-> simply yeh hook hume current location ke baare me information deta hai, jaise ki url, state, etc. Is case me humne state se email ko access kiya hai jo signup page se pass kiya gaya tha.
+            const [loading,setLoading]=useState(false);
+        
+            const sendOtp=async()=>{
+
+        try{
+            setLoading(true);
+            const response=await api.post('/resend-otp',{email:email});
+            console.log(response.data.message);
+
+            toast.success(response.data.message);
+        }
+        catch(error){
+            toast.error(error.response.data.message || 'Something went wrong');
+        }
+        finally{
+            setLoading(false);
+        }
+
+    }
+           
 
             const handleSubmit=async(e)=>{
 
@@ -71,21 +91,27 @@
 
           
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold mt-3"
-          >
-            Verify Otp
-          </button>
+            <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 transition rounded-xl py-3 font-semibold mt-3"
+                >
+                {loading ? "Processing..." : "Verify OTP"}
+            </button>
         </form>
 
         </div>
 
         <p className="text-center text-slate-400 text-sm mt-6">
          Didn't receive the OTP?{" "}
-          <Link to="/signup" className="text-blue-500 hover:text-blue-400 font-medium">
-                Resend Otp
-            </Link>
+          <button
+                type="button"
+                onClick={sendOtp}
+                disabled={loading}
+                className="text-blue-500 hover:underline"
+                >
+                {loading ? "Sending..." : "Resend OTP"}
+                </button>
         </p>
       </div>
     </div>

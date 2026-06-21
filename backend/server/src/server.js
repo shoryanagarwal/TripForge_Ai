@@ -1,7 +1,7 @@
 const dotenv=require('dotenv')
 const app = require("./app");
 const http = require('http');
-
+const PORT = process.env.PORT || 3000;
 const server= http.createServer(app)
 const {Server} = require('socket.io');
 const io=new Server(server,{
@@ -12,16 +12,15 @@ const io=new Server(server,{
 global.io=io;
 
 const sequelize = require('./config/database.js');
+const e = require('express');
 dotenv.config();
 
+// require('./jobs/busRemainder.js');
+// require('./jobs/flightreminderBooking.js');
+// require('./jobs/busexpireBooking.js');
+// require('./jobs/flightexpireBooking.js');
 
 
-
-// require('./jobs/flightexpireBooking.js')
-// require('./jobs/flightreminderBooking.js')
-// require('./jobs/busexpireBooking.js')
-// require('./jobs/busRemainder.js')
-const PORT = process.env.PORT || 3000;
 
 const startServer= async()=>{
 

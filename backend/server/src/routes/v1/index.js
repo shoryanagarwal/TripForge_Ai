@@ -2,13 +2,36 @@ const express = require('express');
 const {User}=require('../../models')
 const router=express.Router();
 
+const FlightRazorPayController=require('../../controller/FlightRazorPaycontroller.js')
+const razorPayController=new FlightRazorPayController();
+
+const BusRazorPayController=require('../../controller/BusRazorPayController.js')
+const busRazorPayController=new BusRazorPayController();
 const AuthController=require('../../controller/authController.js')
+
+
 const authenticatorUser=require('../../middleware/auth_middleware.js')
+
 const authcontroller=new AuthController();
 
 const {isadmin} =require('../../middleware/authorisation_middleware.js')
+
+
+
 router.post('/signup',authcontroller.signup);
 router.post('/login',authcontroller.login);
+router.post('/forgot-password',authcontroller.forgotPassword);
+router.post('/reset-password',authcontroller.resetPassword);
+
+
+router.post('/razorpay/create-order',authenticatorUser,razorPayController.createOrder);
+router.get('/razorpay/fetch-order/:id',authenticatorUser,razorPayController.fetchOrderById);
+router.post('/razorpay/verify-payment',authenticatorUser,razorPayController.verifyPayment);
+
+
+router.post('/bus-razorpay/create-order',authenticatorUser,busRazorPayController.createOrder);
+router.get('/bus-razorpay/fetch-order/:id',authenticatorUser,busRazorPayController.fetchOrderById);
+router.post('/bus-razorpay/verify-payment',authenticatorUser,busRazorPayController.verifyPayment);
 
 
 router.get('/profile',authenticatorUser,async(req,res)=>{
