@@ -11,7 +11,7 @@ const io=new Server(server,{
 })
 global.io=io;
 
-const sequelize = require('./config/database.js');
+const {sequelize} = require('./models');
 const e = require('express');
 dotenv.config();
 
@@ -26,6 +26,8 @@ const startServer= async()=>{
 
     try{
         await sequelize.authenticate();
+        await sequelize.sync({ alter: true });
+    console.log("Database synced successfully.");
 
         console.log("Connection has been established successfully.");
 
