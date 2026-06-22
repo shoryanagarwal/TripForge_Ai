@@ -29,7 +29,8 @@ module.exports = {
                 require: true,
                 rejectUnauthorized: false
             }
-        }
+        },
+        ssl: true
     }
 
 }
