@@ -23,6 +23,7 @@ import Ai_Assistant from './pages/Ai_Assistant.jsx'
 import Notification from './pages/Home/Notification.jsx'
 import Profile from './pages/Home/UserProfile.jsx'
 import ForgotPassword from './pages/Auth/ForgotPassword.jsx'
+import LandingPage from './pages/LandingPage/LandingPage.jsx'
 
 function App() {
 
@@ -43,7 +44,7 @@ function App() {
           <Route path='/Flight/:id/book' element={<FlightBooking/>}/>
           <Route path='/payment' element={<FlightPayment/>}/>
           <Route path='/my-bookings' element={<MyBookings/>}/>
-
+          <Route path='/landing' element={<LandingPage/>}/>
           <Route path='/booking/:id' element={<BookingDetails/>}/>
 
           <Route path='/forgot-password' element={<ForgotPassword/>}/>
