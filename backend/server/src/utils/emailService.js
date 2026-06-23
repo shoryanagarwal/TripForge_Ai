@@ -1,53 +1,43 @@
-const nodemailer=require('nodemailer')
 const dotenv=require('dotenv')
 dotenv.config();
+const {Resend}=require('resend')
+
+const fs=require('fs')
 
 
-const transporter= nodemailer.createTransport({
-      host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-    auth:{
-        user:process.env.EMAIL_USER,
-        pass:process.env.EMAIL_PASS
-    }
+const resend =new Resend(process.env.RESEND_API_KEY)
 
 
-})
 
-
-const sendEmail= async({to,subject,text,html,attachments})=>{
+const sendEmail=async({to, subject, text, html, attachments})=>{
 
     try{
-        
-        const email=await transporter.sendMail({
-            from:process.env.EMAIL_USER,
+        const formattedAttachments=attachments?.map((file)=>({
+        filename: file.filename,
+        content: fs.readFileSync(file.path).toString("base64"),            
+        }))
+
+        const response=await resend.emails.send({
+            from: process.env.EMAIL_FROM || "TripForge AI <onboarding@resend.dev>",
             to,
             subject,
             text,
             html,
-            attachments
-
-
+            attachments: formattedAttachments,
         })
 
-        return email;
 
+        return response;
     }
-
     catch(error){
-
-        console.error("Error sending email:",error);
-        throw error;
-
-
-
+        console.error('Error sending email:',error);
+        throw new Error('Failed to send email');
     }
-
-
 
 
 }
+
+
 
 
 module.exports=sendEmail;
