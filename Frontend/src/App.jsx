@@ -32,7 +32,7 @@ function App() {
        <BrowserRouter>
        <Toaster position="top-right" />
 
-       <SocketNotification />
+      {localStorage.getItem("token") && <SocketNotification />}
        
         <Routes>
 
