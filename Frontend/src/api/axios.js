@@ -26,7 +26,7 @@ api.interceptors.response.use((response)=>response,
             toast.error(
         "Session expired. Please login again to continue."
       );
-            window.location.href='/landing'
+            window.location.href='/Login'
         }
         return Promise.reject(error)
     }

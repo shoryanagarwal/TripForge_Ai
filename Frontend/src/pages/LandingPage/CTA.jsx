@@ -33,7 +33,7 @@ function CTA() {
             </button>
 
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/Login")}
               className="border border-slate-700 hover:border-cyan-400 px-7 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
             >
               <LogIn size={18} />

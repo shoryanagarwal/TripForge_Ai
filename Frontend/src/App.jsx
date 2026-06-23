@@ -36,7 +36,7 @@ function App() {
        
         <Routes>
 
-          <Route path='/' element={<Login/>}/>
+          <Route path='/Login' element={<Login/>}/>
           <Route path='/signup' element={<SignUp/>}/>
           <Route path='/home' element={<Home/>}/>
           <Route path='/verify-email' element={<VerifyOtp/>}/>
@@ -44,7 +44,7 @@ function App() {
           <Route path='/Flight/:id/book' element={<FlightBooking/>}/>
           <Route path='/payment' element={<FlightPayment/>}/>
           <Route path='/my-bookings' element={<MyBookings/>}/>
-          <Route path='/landing' element={<LandingPage/>}/>
+          <Route path='/' element={<LandingPage/>}/>
           <Route path='/booking/:id' element={<BookingDetails/>}/>
 
           <Route path='/forgot-password' element={<ForgotPassword/>}/>

@@ -30,7 +30,7 @@ function Navbar(){
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/Login")}
             className="hidden sm:block border border-slate-700 hover:border-blue-500 text-white px-5 py-2 rounded-xl text-sm font-semibold transition"
           >
             Login
