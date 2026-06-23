@@ -15,10 +15,11 @@ const {sequelize} = require('./models');
 const e = require('express');
 dotenv.config();
 
-// require('./jobs/busRemainder.js');
-// require('./jobs/flightreminderBooking.js');
-// require('./jobs/busexpireBooking.js');
-// require('./jobs/flightexpireBooking.js');
+require('./jobs/busRemainder.js');
+require('./jobs/flightreminderBooking.js');
+require('./jobs/busexpireBooking.js');
+require('./jobs/flightexpireBooking.js');
+require('./jobs/DeleteUnVerifiedUser.js');
 
 
 
