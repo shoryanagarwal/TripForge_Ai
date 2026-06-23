@@ -26,7 +26,7 @@ const startServer= async()=>{
 
     try{
         await sequelize.authenticate();
-        await sequelize.sync({ alter: true });
+      
     console.log("Database synced successfully.");
 
         console.log("Connection has been established successfully.");
