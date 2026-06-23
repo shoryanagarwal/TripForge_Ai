@@ -40,7 +40,7 @@
                     try{
                         const response =await api.post('/verify-email',{email,otp});
                         toast.success(response.data.message);
-                        navigate('/home');
+                        navigate('/Login');
 
 
 
