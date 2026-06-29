@@ -25,32 +25,58 @@ class Authenticate{
 
         try{
 
-            const existingUser=await userRepository.findByEmail(data.email);
+          let user=await userRepository.findByEmail(data.email);
 
-            if(existingUser){
-                throw new Error("User already exists with this email");
-            }
+          if(user){
+             if(user.isVerified){
+                throw new Error("User already exists with this email. Please login.");
+             }
 
-            const hashedPassword=bcrypt.hashSync(data.password,10)
-
-            const otp=generateOtp();
-            const hashedOtp=bcrypt.hashSync(otp,10);
-            const otpExpiry=new Date(Date.now()+10*60*1000);
-
-
-
-            const user=await userRepository.createUser({
-                ...data,
-                password:hashedPassword,
-                otp:hashedOtp,
-                otp_expiry:otpExpiry,
-                isVerified:false
-            })
+             const otp=generateOtp();
+                const hashOtp=bcrypt.hashSync(otp,10);
+                user.otp=hashOtp;
+                user.otp_expiry=new Date(Date.now() + 10 * 60 * 1000);
+                await user.save();
 
 
+                try{
+                    await sendEmail({
+                        to: user.email,
+                    subject: "TripForge AI - Verify Your Email",
+                    html: `
+                        <h2>Email Verification</h2>
+                        <p>Hi ${user.name},</p>
+                        <p>Your OTP is:</p>
+                        <h1>${otp}</h1>
+                        <p>This OTP is valid for 10 minutes.</p>
+                    `,
+                });
+                }
+                catch(error){
+                    console.log("Error sending email in service",error);
+                    throw new Error("Error sending email. Please try again later.");
 
+                }
+
+                return user;
+          }
+
+
+          const hashedPassword=bcrypt.hashSync(data.password,10);
+          const otp=generateOtp();
+          const hashOtp=bcrypt.hashSync(otp,10);
+          const otpExpiry=new Date(Date.now() + 10 * 60 * 1000);
+           user = await userRepository.createUser({
+            ...data,
+            password: hashedPassword,
+            otp: hashedOtp,
+            otp_expiry: otpExpiry,
+            isVerified: false
+        });
+
+        try{
             await sendEmail({
-                 to: user.email,
+                to: user.email,
                 subject: "TripForge AI - Verify Your Email",
                 html: `
                     <h2>Email Verification</h2>
@@ -59,12 +85,14 @@ class Authenticate{
                     <h1>${otp}</h1>
                     <p>This OTP is valid for 10 minutes.</p>
                 `,
+            });
+        }
+        catch(error){
+            console.log("Error sending email in service",error);
+            throw new Error("Error sending email. Please try again later.");
+        }
 
-            })
-
-
-            return user;
-
+        return user;
 
         }
         catch(error){
