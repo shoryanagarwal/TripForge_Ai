@@ -1,49 +1,45 @@
-const dotenv=require('dotenv')
+const dotenv = require("dotenv");
 dotenv.config();
 
+const SibApiV3Sdk = require("@getbrevo/brevo");
 
-const nodemailer=require('nodemailer')
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-const transporter=nodemailer.createTransport({
-     host:process.env.EMAIL_HOST,
-     port:Number(process.env.EMAIL_PORT),
-     secure:false,
-     auth:{
-        user:process.env.EMAIL_USER,
-        pass:process.env.EMAIL_PASSWORD
-     }
-    
-})
-
-transporter.verify((error, success) => {
-    if (error) {
-        console.log("SMTP Verify Error:", error);
-    } else {
-        console.log("SMTP Server is ready");
-    }
-});
-
-const sendEmail=async({to,subject,text,html,attachments})=>{
-    try{
-        const response=await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
-        to,
-        subject,
-        text,
-        html,
-        attachments
-    }
+apiInstance.setApiKey(
+  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
 );
 
-    return response;
+const sendEmail = async ({ to, subject, text, html, attachments }) => {
+  try {
+    const email = {
+      sender: {
+        name: "TripForge AI",
+        email: process.env.EMAIL_FROM_ADDRESS,
+      },
+      to: [
+        {
+          email: to,
+        },
+      ],
+      subject,
+      htmlContent: html,
+      textContent: text,
+    };
 
-}
-
-    catch(error){
-        console.error("Error sending email:", error);
-        throw error;
+    if (attachments && attachments.length > 0) {
+      email.attachment = attachments.map((file) => ({
+        name: file.filename,
+        content: file.content.toString("base64"),
+      }));
     }
-}
 
+    const response = await apiInstance.sendTransacEmail(email);
+    return response;
+  } catch (error) {
+    console.error("Brevo email error:", error);
+    throw error;
+  }
+};
 
-module.exports=sendEmail;
+module.exports = sendEmail;
