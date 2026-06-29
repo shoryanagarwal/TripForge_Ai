@@ -69,7 +69,7 @@ class Authenticate{
            user = await userRepository.createUser({
             ...data,
             password: hashedPassword,
-            otp: hashedOtp,
+            otp: hashOtp,
             otp_expiry: otpExpiry,
             isVerified: false
         });
