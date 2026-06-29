@@ -19,7 +19,6 @@
         try{
             setLoading(true);
             const response=await api.post('/resend-otp',{email:email});
-            console.log(response.data.message);
 
             toast.success(response.data.message);
         }
