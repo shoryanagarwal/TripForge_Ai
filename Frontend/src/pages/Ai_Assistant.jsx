@@ -29,7 +29,11 @@ function Ai_Assistant(){
                 toast.error("Source and destination are required");
                 return;
             }
-
+            if(!formData.date){
+                toast.error("Date is required");
+                return;
+            }
+            
             setLoading(true);
             const response= await api.post('/ai/recommend',formData);
 

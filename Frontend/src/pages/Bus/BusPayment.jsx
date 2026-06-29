@@ -228,7 +228,6 @@ function BusPayment(){
 
               const rzp=new window.Razorpay(options);
               rzp.on('payment.failed', function (response){
-                console.log("Payment failed",response.error);
                 toast.error('Payment failed. Please try again.')
               })
               rzp.open();

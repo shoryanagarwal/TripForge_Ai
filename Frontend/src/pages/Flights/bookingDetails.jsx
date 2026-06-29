@@ -14,7 +14,6 @@ function BookingDetails(){
     const location=useLocation();
 
     const booking=location.state?.booking;
-    console.log("Booking details:",booking);
 
     if(!booking){
         return (

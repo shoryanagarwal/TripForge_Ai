@@ -33,7 +33,6 @@ function FlightBooking(){
             try{
                 const response=await api.get(`/flights/${flight.id}/fare-packages`);
 
-                console.log("Fare packages for flight",flight.id,response.data.data);
 
 
                 const packageData= Array.isArray(response.data.data)? response.data.data : Array

@@ -20,11 +20,9 @@ function Login(){
                 try{
                   const response= await api.post('/login',formData);
                   const {token,user}=response.data.data;
-                  console.log(response.data.data);
 
                   localStorage.setItem('token',token);
                   localStorage.setItem('user',JSON.stringify(user));
-                  console.log(token);
                   
                   toast.success(response.data.message);
                   navigate('/home');

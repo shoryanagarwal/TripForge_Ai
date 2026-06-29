@@ -10,12 +10,10 @@ useEffect(()=>{
 
 
     socket.on('connect',()=>{
-        console.log("Socket connected with id:", socket.id);
 
 
         if(user?.id){
             socket.emit('join',user.id);
-            console.log("Joining room:", user.id);
         }
 
 
@@ -28,8 +26,7 @@ useEffect(()=>{
 
 
     socket.on('notification',(notification)=>{
-        console.log("Received notification:",notification);
-        // toast.success(notification.message || "You have a new notification")
+        toast.success(notification.message || "You have a new notification")
     
     })
 

@@ -45,7 +45,7 @@ function Footer() {
                 How It Works
               </a>
 
-              <a href="/login" className="hover:text-white transition">
+              <a href="/Login" className="hover:text-white transition">
                 Login
               </a>
 

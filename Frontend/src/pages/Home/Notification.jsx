@@ -22,7 +22,6 @@ function Notification(){
 
                 const response=await api.get(`/users/${user.id}/notifications`);
                 setNotifications(response.data.data);
-                console.log("Notifications fetched in navbar",response.data.data);
 
 
             }

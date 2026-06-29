@@ -73,7 +73,6 @@ function ForgotPassword(){
                 otp:FormData.otp,
                 newPassword:FormData.newPassword
             });
-            console.log(response.data);
             toast.success(response.data.message);
             navigate('/');
 

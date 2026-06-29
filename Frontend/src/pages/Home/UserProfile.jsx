@@ -17,7 +17,6 @@ function Profile(){
 
             try{
                 const response = await api.get('/profile');
-                console.log('User data:', response.data.data.user);
                 setUser(response.data.data.user);
 
 
