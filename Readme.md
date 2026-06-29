@@ -62,10 +62,107 @@ For payments:
 
 Booking Created → Razorpay Order Created → Payment Completed → Signature Verified → Booking Confirmed → PDF Ticket Generated → Email + Notification Sent.
 
-## Installation
 
-### Clone the repository
+
+
+
+
+# Environment Variables
+
+## Backend (.env)
+
+```env
+PORT=
+
+DATABASE_URL=
+
+JWT_SECRET_KEY=
+
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+
+RESEND_API_KEY=
+
+EMAIL_USER=
+EMAIL_PASS=
+
+GROQ_API_KEY=
+```
+
+## Frontend (.env)
+
+```env
+VITE_API_URL=
+
+VITE_RAZORPAY_KEY_ID=
+```
+
+---
+
+#  Installation
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/shoryanagarwal/TripForge_Ai.git
-cd TripForge_Ai
+```
+
+---
+
+## Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+---
+
+## Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+#  Screenshots
+
+- Landing Page
+- AI Assistant Dashboard
+- Flight Booking
+- Fare Package Selection
+- Razorpay Checkout
+- Booking Confirmation
+
+---
+
+#  Future Improvements
+
+- Hotel Booking
+- Train Booking
+- Multi-city Trips
+- Travel History Analytics
+- Personalized AI Recommendations
+- Wishlist & Saved Trips
+- Push Notifications
+- Admin Analytics Dashboard
+
+---
+
+# Author
+
+**Shoryan Agarwal**
+
+B.Tech CSE | IIIT Ranchi
+
+🔗 LinkedIn: https://www.linkedin.com/in/shoryan-agarwal-584236345/
+
+💻 GitHub: https://github.com/shoryanagarwal
+
+---
+
+##  If you found this project interesting, consider giving it a star!
