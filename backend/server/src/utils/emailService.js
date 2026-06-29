@@ -18,7 +18,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
         to: [{ email: to }],
         subject,
         htmlContent: html,
-        textContent: text || "",
+        textContent: text || html?.replace(/<[^>]*>/g, " ") || "TripForge AI email",
       }),
     });
 
